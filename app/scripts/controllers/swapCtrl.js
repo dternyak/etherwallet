@@ -93,13 +93,12 @@ var swapCtrl = function($scope, shapeShiftService) {
         }
     }
 
-
     $scope.setOrderCoin = function(isFrom, coin) {
         if (isFrom) {
           $scope.swapOrder.fromCoin = coin
         } else {
           $scope.swapOrder.toCoin = coin
-        };
+        }
 
         if ($scope.swapOrder.fromCoin ===  $scope.swapOrder.toCoin) {
           $scope.handleMatchingToAndFromCoins()
@@ -107,23 +106,46 @@ var swapCtrl = function($scope, shapeShiftService) {
 
         $scope.isBitySwap = $scope.swapProvider($scope.swapOrder.fromCoin, $scope.swapOrder.toCoin) === 'BITY';
 
+      $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + "/" + $scope.swapOrder.toCoin;
+
+      if ($scope.isBitySwap) {
         $scope.swapOrder.swapRate = $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
-        $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + "/" + $scope.swapOrder.toCoin;
-        $scope.updateEstimate(isFrom);
-        $scope.dropdownFrom = $scope.dropdownTo = false;
-    }
+      } else {
+        $scope.swapOrder.swapRate = $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]["RATES"][$scope.swapOrder.fromCoin].rate
+      }
+
+      $scope.updateEstimate(isFrom);
+
+      $scope.dropdownFrom = $scope.dropdownTo = false;
+    };
 
     $scope.updateEstimate = function(isFrom) {
         var cost;
-        if (isFrom) {
-          cost = $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin] * $scope.swapOrder.fromVal;
-          $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
-        }
-        else {
-          cost = $scope.swapOrder.toVal / $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
-          $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
+        // BITY - SET INPUT VALUES
+        if ($scope.isBitySwap) {
+          if (isFrom) {
+            cost = $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin] * $scope.swapOrder.fromVal;
+            $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
+          }
+          else {
+            cost = $scope.swapOrder.toVal / $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
+            $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
+          }
+          // SHAPESHIFT - SET INPUT VALUES
+        } else {
+          let rate = $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]["RATES"][$scope.swapOrder.fromCoin].rate;
+          if (isFrom) {
+            cost = rate * $scope.swapOrder.fromVal;
+            $scope.swapOrder.toVal = parseFloat(cost) // .toFixed(bity.decimals));
+          }
+          else {
+            cost = $scope.swapOrder.toVal / rate;
+            $scope.swapOrder.fromVal = parseFloat(cost) // .toFixed(bity.decimals));
+          }
+
         }
         $scope.swapOrder.isFrom = isFrom;
+
     };
 
     $scope.setFinalPrices = function() {
