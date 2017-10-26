@@ -9,26 +9,30 @@
 
     <!-- Colored Columns -->
     <section class="row order-panel">
-        <div class="col-sm-6 order-info">
-            <p class="mono">
-                <input class="form-control input-sm" ng-model="priceTicker.ETHBTC"/>
-                <span>ETH = {{bity.curRate.ETHBTC*priceTicker.ETHBTC | number: 6}} BTC</span>
-            </p>
-            <p class="mono">
-                <input class="form-control input-sm" ng-model="priceTicker.ETHREP"/>
-                <span>ETH = {{bity.curRate.ETHREP*priceTicker.ETHREP | number: 6}} REP</span>
-            </p>
+        <div ng-if="true">
+            <div class="col-sm-6 order-info">
+                <p class="mono">
+                    <input class="form-control input-sm" ng-model="priceTicker.ETHBTC"/>
+                    <span>ETH = {{bity.curRate.ETHBTC*priceTicker.ETHBTC | number: 6}} BTC</span>
+                </p>
+                <p class="mono">
+                    <input class="form-control input-sm" ng-model="priceTicker.ETHREP"/>
+                    <span>ETH = {{bity.curRate.ETHREP*priceTicker.ETHREP | number: 6}} REP</span>
+                </p>
+            </div>
+            <div class="col-sm-6 order-info">
+                <p class="mono">
+                    <input class="form-control input-sm" ng-model="priceTicker.BTCETH"/>
+                    <span>BTC = {{bity.curRate.BTCETH*priceTicker.BTCETH | number: 6}} ETH</span>
+                </p>
+                <p class="mono">
+                    <input class="form-control input-sm" ng-model="priceTicker.BTCREP"/>
+                    <span>BTC = {{bity.curRate.BTCREP*priceTicker.BTCREP | number: 6}} REP</span>
+                </p>
+            </div>
         </div>
-        <div class="col-sm-6 order-info">
-            <p class="mono">
-                <input class="form-control input-sm" ng-model="priceTicker.BTCETH"/>
-                <span>BTC = {{bity.curRate.BTCETH*priceTicker.BTCETH | number: 6}} ETH</span>
-            </p>
-            <p class="mono">
-                <input class="form-control input-sm" ng-model="priceTicker.BTCREP"/>
-                <span>BTC = {{bity.curRate.BTCREP*priceTicker.BTCREP | number: 6}} REP</span>
-            </p>
-        </div>
+
+
         <div ng-if="isBitySwap">
             <a class="link bity-logo" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">
                 <img src="images/logo-bity-white.svg" width="120" height="49"/></a>
@@ -51,47 +55,62 @@
 
     <br/>
 
-    <input class="form-control"
-           type="text"
-           placeholder="{{ 'SEND_amount_short' | translate }}"
-           ng-change="updateEstimate(true)"
-           ng-model="swapOrder.fromVal"
-           ng-click="showedMinMaxError = false"
-           ng-class="Validator.isPositiveNumber(swapOrder.fromVal)  && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
+    <div class="">
 
-    <span class="dropdown">
-    <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">{{swapOrder.fromCoin}}<i
-            class="caret"></i></a>
-    <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownFrom">
-      <li ng-repeat="coin in availableCoins track by $index">
-        <a ng-class="{true:'active'}[coin == swapOrder.fromCoin]" ng-click="setOrderCoin(true, coin)"> {{coin}} </a>
-      </li>
-    </ul>
-  </span>
+    <div class="col-md-3 col-md-offset-2">
+        <p style="margin-left: -75px; color: red; margin-top: -23px" ng-if="originRateError">{{originRateError}}</p>
+        <input id="origin"
+               class="form-control"
+               type="text"
+               placeholder="{{ 'SEND_amount_short' | translate }}"
+               ng-change="updateEstimate(true)"
+               ng-model="swapOrder.fromVal"
+               ng-click="showedMinMaxError = false"
+               ng-class="Validator.isPositiveNumber(swapOrder.fromVal)  && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
 
-    <h1 translate="SWAP_init_2"> for </h1>
-
-    <input class="form-control"
-           type="text"
-           placeholder="{{ 'SEND_amount_short' | translate }}"
-           ng-change="updateEstimate(false)"
-           ng-model="swapOrder.toVal"
-           ng-click="showedMinMaxError = false"
-           ng-class="Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
-
-    <div class="dropdown">
-        <a class="btn btn-default dropdown-toggle" class="dropdown-toggle" ng-click="dropdownTo = !dropdownTo">{{swapOrder.toCoin}}<i
+        <div class="dropdown" style="margin-top: -48px; margin-left: 150px">
+        <a class="btn btn-default dropdown-toggle" ng-click="dropdownFrom = !dropdownFrom">{{swapOrder.fromCoin}}<i
                 class="caret"></i></a>
-        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo">
-            <li ng-repeat="coin in allAvailableDestinationCoins track by $index" ng-show="coin != swapOrder.fromCoin">
-                <a ng-class="{true:'active'}[coin == swapOrder.toCoin]" ng-click="setOrderCoin(false, coin)">
-                    {{coin}} </a>
-            </li>
+        <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownFrom">
+          <li ng-repeat="coin in availableCoins track by $index">
+            <a ng-class="{true:'active'}[coin == swapOrder.fromCoin]" ng-click="setOrderCoin(true, coin)"> {{coin}} </a>
+          </li>
         </ul>
     </div>
+    </div>
 
-    <div class="col-xs-12 clearfix text-center">
-        <a ng-click="setFinalPrices()" class="btn btn-info btn-primary">
+    <div class="col-md-1" style="margin-left: 60px">
+        <h1 translate="SWAP_init_2"> for </h1>
+    </div>
+
+    <div class="col-md-3 col-md-offset-1" style="margin-left: 90px">
+        <p style="margin-left: -75px; color: red; margin-top: -23px" ng-if="destinationRateError">{{destinationRateError}}</p>
+        <input id="destination"
+               class="form-control"
+               type="text"
+               placeholder="{{ 'SEND_amount_short' | translate }}"
+               ng-change="updateEstimate(false)"
+               ng-model="swapOrder.toVal"
+               ng-click="showedMinMaxError = false"
+               ng-class="Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
+
+        <div class="dropdown" style="margin-top: -48px; margin-left: 150px">
+            <a class="btn btn-default dropdown-toggle" ng-click="dropdownTo = !dropdownTo">{{swapOrder.toCoin}}<i
+                    class="caret"></i></a>
+            <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo">
+                <li ng-repeat="coin in allAvailableDestinationCoins track by $index"
+                    ng-show="coin != swapOrder.fromCoin">
+                    <a ng-class="{true:'active'}[coin == swapOrder.toCoin]" ng-click="setOrderCoin(false, coin)">
+                        {{coin}} </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    </div>
+
+    <div class="col-xs-12 clearfix text-center" style="margin-top: 80px">
+        <a ng-click="setFinalPrices()" ng-disabled="(originRateError || destinationRateError) || !(Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues())" class="btn btn-info btn-primary">
             <span translate="SWAP_init_CTA"> Let's do this! </span>
         </a>
     </div>

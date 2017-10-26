@@ -1,12 +1,13 @@
 'use strict';
 
+let softMinCapETH = 0.001;
+let softMinCapBTC = 0.00001;
+
 var shapeShiftService = function($http) {
   return {
-    getPairRate: function(originSymbol, destinationSymbol) {
-      let pair =
-        originSymbol.toLowerCase() + '_' + destinationSymbol.toLowerCase();
+    getMarketInfo: function() {
       return $http
-        .get(`https://shapeshift.io/rate/${pair}`)
+        .get(`https://shapeshift.io/marketinfo`)
         .then(function(resp) {
           return resp.data;
         })
@@ -15,6 +16,30 @@ var shapeShiftService = function($http) {
           // TODO: show err notification
           return err;
         });
+    },
+
+    getPairRateFromMarketInfo: function(originKind, destinationKind, marketInfo) {
+      let pair = originKind.toUpperCase() + '_' + destinationKind.toUpperCase();
+      let filteredArray = marketInfo.filter(function(obj) {
+        return obj.pair === pair;
+      });
+      if (filteredArray) {
+        let pairData = filteredArray[0];
+        if (originKind === 'ETH') {
+          if (pairData.min < softMinCapETH) {
+            pairData.min = softMinCapETH;
+          }
+        }
+        if (originKind === 'BTC') {
+          if (pairData.min < softMinCapBTC) {
+            pairData.min = softMinCapBTC;
+          }
+        }
+        return pairData;
+      } else
+        throw Error(
+          `No match found for ${pair}. Please contact support@myetherwallet.com with status code RTE22`
+        );
     },
 
     getTimeRemaining: function(address) {
@@ -50,7 +75,12 @@ var shapeShiftService = function($http) {
             availableCoins,
             whiteListSymbolArray
           );
-          return that.attachRatesToCoins(whiteListedAvailableCoins);
+          return that
+            .attachRatesToCoins(whiteListedAvailableCoins)
+            .then(function(coinDataWithRates) {
+              return coinDataWithRates;
+            });
+          // TODO - catch errors;
         })
         .catch(function(err) {
           console.log(err);
@@ -67,23 +97,31 @@ var shapeShiftService = function($http) {
       return filteredObj;
     },
 
+    attachRateToCoin: function(coinsObj, coinSymbol, originKind, marketInfo) {
+      let destinationKind = coinsObj[coinSymbol].symbol;
+      let pairRate = this.getPairRateFromMarketInfo(originKind, destinationKind, marketInfo);
+      if (!coinsObj[coinSymbol]['RATES']) {
+        coinsObj[coinSymbol]['RATES'] = {};
+      }
+      coinsObj[coinSymbol]['RATES'][originKind] = pairRate;
+    },
+
     attachRatesToCoins: function(coinsObj, originKindArray) {
       if (!originKindArray) {
         originKindArray = ['BTC', 'ETH'];
       }
       let that = this;
-      Object.keys(coinsObj).forEach(function(key) {
-        originKindArray.forEach(function(originKind) {
-          coinsObj[key]['RATES'] = {};
-          that
-            .getPairRate(originKind, coinsObj[key].symbol)
-            .then(function(pairRate) {
-              coinsObj[key]['RATES'][originKind] = pairRate;
-            });
+      return this.getMarketInfo().then(function(marketInfo) {
+        Object.keys(coinsObj).forEach(function(coinSymbol) {
+          originKindArray.forEach(function(originKind) {
+            that.attachRateToCoin(coinsObj, coinSymbol, originKind, marketInfo);
+          });
         });
+        return coinsObj;
       });
-      return coinsObj;
+      // TODO - catch errors
     }
   };
 };
+
 module.exports = shapeShiftService;
