@@ -34,11 +34,11 @@
 
 
         <div ng-if="isBitySwap">
-            <a class="link bity-logo" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">
+            <a class="link bity-logo" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener noreferrer">
                 <img src="images/logo-bity-white.svg" width="120" height="49"/></a>
         </div>
         <div ng-if="!isBitySwap">
-            <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener">
+            <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener noreferrer">
                 <img src="images/ShapeShift.png" width="120" height="49"/></a>
         </div>
     </section>

@@ -6,7 +6,7 @@
   <section class="row">
     <h5 class="col-xs-6 col-xs-offset-3" translate="SWAP_information">Your Information</h5>
       <div class="col-xs-3" ng-if="isBitySwap">
-          <a class="link" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">
+          <a class="link" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener noreferrer">
               <img class="pull-right" src="images/logo-bity.svg" width="100" height="38"/>
           </a>
       </div>
