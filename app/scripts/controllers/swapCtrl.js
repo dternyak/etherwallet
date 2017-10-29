@@ -48,6 +48,8 @@ let swapCtrl = function($scope, shapeShiftService) {
       provider = 'BITY';
     } else if (originKind === 'BTC' && destinationKind === 'ETH') {
       provider = 'BITY';
+    } else if ((originKind === 'BTC' || originKind === 'ETH') && destinationKind === 'REP') {
+      provider = 'BITY';
     } else {
       provider = 'SHAPESHIFT';
     }
@@ -70,6 +72,66 @@ let swapCtrl = function($scope, shapeShiftService) {
     };
   };
 
+  function roundNumber(rnum, rlength) {
+    var newnumber = Math.round(rnum * Math.pow(10, rlength)) / Math.pow(10, rlength);
+    return newnumber;
+  }
+
+  $scope.verifyMinMaxValuesBity = function() {
+    let BTCMinimum = bity.min;
+    let BTCMaximum = bity.max;
+    if ($scope.swapOrder.fromCoin === 'BTC') {
+      if ($scope.swapOrder.fromVal < BTCMinimum) {
+        $scope.originRateError = `Minimum BTC amount is ${BTCMinimum}`;
+        return false;
+      }
+      if ($scope.swapOrder.fromVal > BTCMaximum) {
+        $scope.originRateError = `Maximum BTC amount is ${BTCMaximum}`;
+        return false;
+      }
+      $scope.originRateError = null;
+      $scope.destinationRateError = null;
+    } else if ($scope.swapOrder.fromCoin === 'ETH') {
+      let ETHMinimum = BTCMinimum / $scope.bity.curRate['ETHBTC'];
+      let ETHMinimumWithBuffer = ETHMinimum + 0.3 * ETHMinimum;
+      let ETHMinimumRounded = roundNumber(ETHMinimumWithBuffer, 3);
+
+      let ETHMaximum = BTCMaximum / $scope.bity.curRate['ETHBTC'];
+      let ETHMaximumWithBuffer = ETHMaximum - 0.2 * ETHMinimum;
+      let ETHMaximumRounded = roundNumber(ETHMaximumWithBuffer, 3);
+
+      if ($scope.swapOrder.fromVal < ETHMinimumRounded) {
+        $scope.originRateError = `Minimum ETH amount is ${ETHMinimumRounded}`;
+        return false;
+      }
+      if ($scope.swapOrder.fromVal > ETHMaximumRounded) {
+        $scope.originRateError = `Maximum ETH amount is ${ETHMaximumRounded}`;
+        return false;
+      }
+      $scope.originRateError = null;
+      $scope.destinationRateError = null;
+      return true
+    }
+  };
+
+  $scope.verifyMinMaxValuesShapeShift = function() {
+    let shapeShiftPairMarketData =
+      $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][$scope.swapOrder.fromCoin];
+    let minimum = shapeShiftPairMarketData['min'];
+    let maximum = shapeShiftPairMarketData['maxLimit'];
+    if ($scope.swapOrder.fromVal < minimum) {
+      $scope.originRateError = `Minimum ${$scope.swapOrder.fromCoin} amount is ${minimum}`;
+      return false;
+    }
+    if ($scope.swapOrder.fromVal > maximum) {
+      $scope.originRateError = `Maximum ${$scope.swapOrder.fromCoin} amount is ${maximum}`;
+      return false;
+    }
+    $scope.originRateError = null;
+    $scope.destinationRateError = null;
+    return true;
+  };
+
   $scope.verifyMinMaxValues = function() {
     if (
       $scope.swapOrder.toVal == '' ||
@@ -90,66 +152,9 @@ let swapCtrl = function($scope, shapeShiftService) {
       };
 
       if ($scope.isBitySwap) {
-        let verify = function() {
-          if (!$scope.bity.priceLoaded) {
-            return errors.priceNotLoaded;
-          } else if ($scope.swapOrder.toVal < bity.min || $scope.swapOrder.fromVal < bity.min)
-            return errors.lessThanMin;
-          else if (
-            ($scope.swapOrder.toCoin === 'BTC' && $scope.swapOrder.toVal > bity.max) ||
-            ($scope.swapOrder.fromCoin === 'BTC' && $scope.swapOrder.fromVal > bity.max)
-          )
-            return errors.greaterThanMax;
-          else if (
-            ($scope.swapOrder.toCoin === 'ETH' &&
-              $scope.swapOrder.toVal * $scope.bity.curRate['ETHBTC'] > bity.max) ||
-            ($scope.swapOrder.fromCoin === 'ETH' &&
-              $scope.swapOrder.fromVal * $scope.bity.curRate['ETHBTC'] > bity.max)
-          )
-            return errors.greaterThanMax;
-          else if (
-            ($scope.swapOrder.toCoin === 'REP' &&
-              $scope.swapOrder.toVal * $scope.bity.curRate['REPBTC'] > bity.max) ||
-            ($scope.swapOrder.fromCoin === 'REP' &&
-              $scope.swapOrder.fromVal * $scope.bity.curRate['REPBTC'] > bity.max)
-          )
-            return errors.greaterThanMax;
-          return errors.noErrors;
-        };
-        let vResult = verify();
-        if (vResult === errors.noErrors) return true;
-        else if (vResult === errors.priceNotLoaded) return false;
-        else if (vResult === errors.lessThanMin || vResult === errors.greaterThanMax) {
-          if (!isStorageOrderExists()) {
-            uiFuncs.notifier.danger(
-              globalFuncs.errorMsgs[27] +
-                bity.max +
-                ' BTC, ' +
-                (bity.max / $scope.bity.curRate['ETHBTC']).toFixed(3) +
-                ' ETH, or ' +
-                (bity.max / $scope.bity.curRate['REPBTC']).toFixed(3) +
-                ' REP',
-              2500
-            );
-            $scope.showedMinMaxError = true;
-          }
-          return false;
-        }
+        return $scope.verifyMinMaxValuesBity();
       } else {
-        let shapeShiftPairMarketData = $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][$scope.swapOrder.fromCoin];
-        let minimum = shapeShiftPairMarketData['min'];
-        let maximum = shapeShiftPairMarketData['maxLimit'];
-        if ($scope.swapOrder.fromVal < minimum) {
-          $scope.originRateError = `Minimum ${$scope.swapOrder.fromCoin} amount is ${minimum}`;
-          return false;
-        }
-        if ($scope.swapOrder.fromVal > maximum) {
-          $scope.originRateError = `Maximum ${$scope.swapOrder.fromCoin} amount is ${maximum}`;
-          return false;
-        }
-        $scope.originRateError = null;
-        $scope.destinationRateError = null;
-        return true;
+        return $scope.verifyMinMaxValuesShapeShift();
       }
     }
   };
@@ -192,32 +197,41 @@ let swapCtrl = function($scope, shapeShiftService) {
     $scope.dropdownFrom = $scope.dropdownTo = false;
   };
 
-  $scope.updateEstimate = function(isFrom) {
+  $scope.updateEstimateBity = function(isFrom) {
     let cost;
+    if (isFrom) {
+      cost =
+        $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin] *
+        $scope.swapOrder.fromVal;
+      $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
+    } else {
+      cost =
+        $scope.swapOrder.toVal /
+        $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
+      $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
+    }
+  };
+
+  $scope.updateEstimateShapeShift = function(isFrom) {
+    let cost;
+    let rate =
+      $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][$scope.swapOrder.fromCoin].rate;
+    if (isFrom) {
+      cost = rate * $scope.swapOrder.fromVal;
+      $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
+    } else {
+      cost = $scope.swapOrder.toVal / rate;
+      $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
+    }
+  };
+
+  $scope.updateEstimate = function(isFrom) {
     // BITY - SET INPUT VALUES
     if ($scope.isBitySwap) {
-      if (isFrom) {
-        cost =
-          $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin] *
-          $scope.swapOrder.fromVal;
-        $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
-      } else {
-        cost =
-          $scope.swapOrder.toVal /
-          $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
-        $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
-      }
-      // SHAPESHIFT - SET INPUT VALUES
+      $scope.updateEstimateBity(isFrom);
     } else {
-      let rate =
-        $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][$scope.swapOrder.fromCoin].rate;
-      if (isFrom) {
-        cost = rate * $scope.swapOrder.fromVal;
-        $scope.swapOrder.toVal = parseFloat(cost.toFixed(bity.decimals));
-      } else {
-        cost = $scope.swapOrder.toVal / rate;
-        $scope.swapOrder.fromVal = parseFloat(cost.toFixed(bity.decimals));
-      }
+      // SHAPESHIFT - SET INPUT VALUES
+      $scope.updateEstimateShapeShift(isFrom);
     }
     $scope.swapOrder.isFrom = isFrom;
   };
@@ -262,6 +276,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
   let setOrderFromStorage = function() {
     let order = JSON.parse(globalFuncs.localStorage.getItem(lStorageKey, null));
+    console.log(JSON.stringify(order));
     $scope.orderResult = order;
     $scope.swapOrder = order.swapOrder;
     processOrder();
@@ -269,7 +284,8 @@ let swapCtrl = function($scope, shapeShiftService) {
   let saveOrderToStorage = function(order) {
     globalFuncs.localStorage.setItem(lStorageKey, JSON.stringify(order));
   };
-  let processOrder = function() {
+
+  let processOrderBity = function() {
     let orderResult = $scope.orderResult;
     orderResult.progress = {
       status: 'OPEN',
@@ -365,29 +381,61 @@ let swapCtrl = function($scope, shapeShiftService) {
       $scope.showStage3Eth = true;
     }
   };
-  $scope.openOrder = function() {
-    if (
+
+  let processOrder = function() {
+    if ($scope.isBitySwap) {
+      processOrderBity();
+    }
+  };
+
+  $scope.isValidAddress = function() {
+    return (
       ($scope.swapOrder.toCoin != 'BTC' &&
         $scope.Validator.isValidAddress($scope.swapOrder.toAddress)) ||
       ($scope.swapOrder.toCoin == 'BTC' &&
         $scope.Validator.isValidBTCAddress($scope.swapOrder.toAddress))
-    ) {
-      let order = {
-        amount: $scope.swapOrder.isFrom ? $scope.swapOrder.fromVal : $scope.swapOrder.toVal,
-        mode: $scope.swapOrder.isFrom ? 0 : 1,
-        pair: $scope.swapOrder.fromCoin + $scope.swapOrder.toCoin,
-        destAddress: $scope.swapOrder.toAddress
-      };
-      $scope.bity.openOrder(order, function(data) {
-        if (!data.error) {
-          $scope.orderResult = data.data;
-          $scope.orderResult.swapOrder = $scope.swapOrder;
-          let orderResult = $scope.orderResult;
-          saveOrderToStorage(orderResult);
-          processOrder();
-        } else $scope.notifier.danger(data.msg);
-        if (!$scope.$$phase) $scope.$apply();
+    );
+  };
+
+  $scope.openOrderBity = function() {
+    let order = {
+      amount: $scope.swapOrder.isFrom ? $scope.swapOrder.fromVal : $scope.swapOrder.toVal,
+      mode: $scope.swapOrder.isFrom ? 0 : 1,
+      pair: $scope.swapOrder.fromCoin + $scope.swapOrder.toCoin,
+      destAddress: $scope.swapOrder.toAddress
+    };
+    $scope.bity.openOrder(order, function(data) {
+      if (!data.error) {
+        $scope.orderResult = data.data;
+        $scope.orderResult.swapOrder = $scope.swapOrder;
+        let orderResult = $scope.orderResult;
+        saveOrderToStorage(orderResult);
+        processOrder();
+      } else $scope.notifier.danger(data.msg);
+      if (!$scope.$$phase) $scope.$apply();
+    });
+  };
+
+  $scope.openOrderShapeShift = function() {
+    shapeShiftService
+      .sendAmount(
+        $scope.swapOrder.toAddress,
+        $scope.swapOrder.fromCoin,
+        $scope.swapOrder.toCoin,
+        $scope.swapOrder.toVal
+      )
+      .then(function(orderInfo) {
+        console.log(orderInfo);
       });
+  };
+
+  $scope.openOrder = function() {
+    if ($scope.isValidAddress()) {
+      if ($scope.isBitySwap) {
+        $scope.openOrderBity();
+      } else {
+        $scope.openOrderShapeShift();
+      }
     } else {
       $scope.notifier.danger(globalFuncs.errorMsgs[5]);
     }
