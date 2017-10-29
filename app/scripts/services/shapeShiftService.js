@@ -3,11 +3,76 @@
 let softMinCapETH = 0.001;
 let softMinCapBTC = 0.00001;
 
+let shapeShiftAPI = 'https://shapeshift.io';
+
 var shapeShiftService = function($http) {
   return {
+    // Status: No Deposits Received
+    // {
+    //   status:"no_deposits",
+    //   address:[address]           //matches address submitted
+    // }
+    //
+    // Status: Received (we see a new deposit but have not finished processing it)
+    // {
+    //   status:"received",
+    //   address:[address]           //matches address submitted
+    // }
+    //
+    // Status: Complete
+    // {
+    //   status : "complete",
+    //   address: [address],
+    //   withdraw: [withdrawal address],
+    //   incomingCoin: [amount deposited],
+    //   incomingType: [coin type of deposit],
+    //   outgoingCoin: [amount sent to withdrawal address],
+    //   outgoingType: [coin type of withdrawal],
+    //   transaction: [transaction id of coin sent to withdrawal address]
+    // }
+    //
+    // Status: Failed
+    // {
+    //   status : "failed",
+    //   error: [Text describing failure]
+    // }
+    checkStatus: function(address) {
+      return $http
+        .get(`${shapeShiftAPI}/txStat/${address}`)
+        .then(function(resp) {
+          return resp.data;
+        })
+        .catch(function(err) {
+          console.log(err);
+          // TODO: show err notification
+          return err;
+        });
+    },
+
+    // pair: [pair],
+    // withdrawal: [Withdrawal Address], //-- will match address submitted in post
+    // withdrawalAmount: [Withdrawal Amount], // Amount of the output coin you will receive
+    // deposit: [Deposit Address (or memo field if input coin is BTS / BITUSD)],
+    // depositAmount: [Deposit Amount], // Exact amount of input coin to send in
+    // expiration: [timestamp when this will expire],
+    // quotedRate: [the exchange rate to be honored]
+    // apiPubKey: [public API attached to this shift, if one was given]
+    sendAmount: function(withdrawal, originKind, destinationKind, destinationAmount) {
+      let pair = originKind.toLowerCase() + '_' + destinationKind.toLowerCase();
+      return $http({
+        url: `${shapeShiftAPI}/sendamount`,
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        data: { withdrawal: withdrawal, pair: pair, amount: destinationAmount }
+      }).then(function(resp) {
+
+        return resp.data.success;
+      });
+    },
+
     getMarketInfo: function() {
       return $http
-        .get(`https://shapeshift.io/marketinfo`)
+        .get(`${shapeShiftAPI}/marketinfo`)
         .then(function(resp) {
           return resp.data;
         })
@@ -44,7 +109,7 @@ var shapeShiftService = function($http) {
 
     getTimeRemaining: function(address) {
       return $http
-        .get(`https://shapeshift.io/timeremaining/${address}`)
+        .get(`${shapeShiftAPI}/timeremaining/${address}`)
         .then(function(resp) {
           return resp.data;
         })
@@ -68,7 +133,7 @@ var shapeShiftService = function($http) {
     getAvailableCoins: function(whiteListSymbolArray) {
       let that = this;
       return $http
-        .get('https://shapeshift.io/getcoins')
+        .get(`${shapeShiftAPI}/getcoins`)
         .then(function(resp) {
           let availableCoins = that.onlyAvailableCoins(resp.data);
           let whiteListedAvailableCoins = that.getWhiteListedCoins(
