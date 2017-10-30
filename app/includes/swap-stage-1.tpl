@@ -9,7 +9,8 @@
 
     <!-- Colored Columns -->
     <section class="row order-panel">
-        <div ng-if="true">
+
+        <div ng-if="isBitySwap">
             <div class="col-sm-6 order-info">
                 <p class="mono">
                     <input class="form-control input-sm" ng-model="priceTicker.ETHBTC"/>
@@ -32,18 +33,40 @@
             </div>
         </div>
 
+        <div ng-if="!isBitySwap">
+            <div class="col-sm-6 order-info">
+                <p class="mono">
+                    <input class="form-control input-sm" value="1" disabled="true"/>
+                    <span>ETH = {{shapeShiftCoinData['ETC']['RATES']['ETH'].rate}} ETC</span>
+                </p>
+                <p class="mono">
+                    <input class="form-control input-sm" value="1" disabled="true"/>
+                    <span>ETH = {{shapeShiftCoinData['SNT']['RATES']['ETH'].rate}} SNT</span>
+                </p>
+            </div>
+            <div class="col-sm-6 order-info">
+                <p class="mono">
+                    <input class="form-control input-sm" value="1" disabled="true"/>
+                    <span>ETH = {{shapeShiftCoinData['GNT']['RATES']['ETH'].rate}} GNT</span>
+                </p>
+                <p class="mono">
+                    <input class="form-control input-sm" value="1" disabled="true"/>
+                    <span>ETH = {{shapeShiftCoinData['REP']['RATES']['ETH'].rate}} REP</span>
+                </p>
+            </div>
+        </div>
+
 
         <div ng-if="isBitySwap">
-            <a class="link bity-logo" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener noreferrer">
+            <a class="link bity-logo" href="https://bity.com/af/jshkb37v" target="_blank" rel="noopener">
                 <img src="images/logo-bity-white.svg" width="120" height="49"/></a>
         </div>
         <div ng-if="!isBitySwap">
-            <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener noreferrer">
+            <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener">
                 <img src="images/ShapeShift.png" width="120" height="49"/></a>
         </div>
     </section>
     <!-- / Colored Columns -->
-
 </article>
 <!-- / Swap Rates Panel -->
 
