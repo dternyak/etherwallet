@@ -56,7 +56,10 @@
     <!-- /Your Address -->
     <!-- CTA -->
     <section class="row text-center">
-      <a ng-click="openOrder()" class="btn btn-primary btn-lg"><span translate="SWAP_start_CTA"> Start Swap </span></a>
+      <a ng-click="openOrder()" class="btn btn-primary btn-lg">
+          <div ng-if="orderOpenLoading">Loading...</div>
+          <span translate="SWAP_start_CTA"> Start Swap </span>
+      </a>
     </section>
     <!-- / CTA -->
   </section>
