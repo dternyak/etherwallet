@@ -1,4 +1,4 @@
-<article class="swap-order" ng-show="showStage3Btc || showStage3Eth">
+<article class="swap-order" ng-show="showStage3Bity && showStage3Btc || showStage3Eth">
 
 
   <!-- Title -->

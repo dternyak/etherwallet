@@ -1,6 +1,6 @@
 'use strict';
 
-let softMinCapETH = 0.001;
+let softMinCapETH = 0.0001;
 let softMinCapBTC = 0.00001;
 
 let shapeShiftAPI = 'https://shapeshift.io';
@@ -43,8 +43,7 @@ var shapeShiftService = function($http) {
           return resp.data;
         })
         .catch(function(err) {
-          console.log(err);
-          // TODO: show err notification
+          err.error = true;
           return err;
         });
     },
@@ -65,7 +64,6 @@ var shapeShiftService = function($http) {
         headers: { 'Content-Type': 'application/json' },
         data: { withdrawal: withdrawal, pair: pair, amount: destinationAmount }
       }).then(function(resp) {
-
         return resp.data.success;
       });
     },
@@ -77,8 +75,7 @@ var shapeShiftService = function($http) {
           return resp.data;
         })
         .catch(function(err) {
-          console.log(err);
-          // TODO: show err notification
+          err.error = true;
           return err;
         });
     },
@@ -114,8 +111,7 @@ var shapeShiftService = function($http) {
           return resp.data;
         })
         .catch(function(err) {
-          console.log(err);
-          // TODO: show err notification
+          err.error = true;
           return err;
         });
     },
@@ -144,12 +140,14 @@ var shapeShiftService = function($http) {
             .attachRatesToCoins(whiteListedAvailableCoins)
             .then(function(coinDataWithRates) {
               return coinDataWithRates;
-            });
-          // TODO - catch errors;
+            })
+          .catch(function(err) {
+            err.error = true;
+            return err;
+          })
         })
         .catch(function(err) {
-          console.log(err);
-          // TODO: show err notification
+          err.error = true;
           return err;
         });
     },
@@ -183,8 +181,11 @@ var shapeShiftService = function($http) {
           });
         });
         return coinsObj;
-      });
-      // TODO - catch errors
+      })
+        .catch(function (err) {
+          err.error = true;
+          return err;
+        })
     }
   };
 };

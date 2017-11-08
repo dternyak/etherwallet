@@ -19,8 +19,8 @@
             <p translate="SWAP_ref_num">Your reference number</p>
         </div>
         <div class="col-sm-3 order-info">
-            <h4>{{orderResult.expiration}}</h4>
-            <p ng-show="orderResult.expiration" translate="SWAP_time">Time remaining to send</p>
+            <h4>{{orderResult.expirationFormatted}}</h4>
+            <p ng-show="orderResult.expirationFormatted" translate="SWAP_time">Time remaining to send</p>
         </div>
         <div class="col-sm-3 order-info">
             <h4>{{orderResult.withdrawalAmount}} {{orderResult.pair.split('_')[1].toUpperCase()}}</h4>
@@ -82,7 +82,7 @@
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-show="showStage3Eth && orderResult.progress.status=='OPEN'">
+    <article class="row" ng-show="showStage3Eth">
         <section class="clearfix collapse-container">
             <div class="text-center" ng-click="wd = !wd">
                 <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
@@ -116,7 +116,7 @@
 
 
     <!-- Swap CTA BTC -->
-    <section class="row block swap-address text-center" ng-show="showStage3Btc && orderResult.progress.status=='OPEN'">
+    <section class="row block swap-address text-center" ng-show="showStage3Btc">
         <label translate="x_Address"> Your Address </label>
         <div class="qr-code" qr-code="{{'bitcoin:'+orderResult.payment_address+'?amount='+orderResult.input.amount}}"
              watch-var="orderResult"></div>
