@@ -7,6 +7,8 @@
   @@if (site === 'mew' ) { @@include( '../includes/swap-stage-2.tpl', { "site": "mew" } ) }
   @@if (site === 'cx'  ) { @@include( '../includes/swap-stage-2.tpl', { "site": "cx"  } ) }
 
+  @@if (site === 'mew' ) { @@include( '../includes/swap-stage-3-shapeshift.tpl', { "site": "mew" } ) }
+
   @@if (site === 'mew' ) { @@include( '../includes/swap-stage-3.tpl', { "site": "mew" } ) }
   @@if (site === 'cx'  ) { @@include( '../includes/swap-stage-3.tpl', { "site": "cx"  } ) }
 
