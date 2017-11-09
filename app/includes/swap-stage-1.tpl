@@ -139,7 +139,7 @@
 
     </div>
 
-    <div class="col-xs-12 clearfix text-center" style="margin-top: 80px">
+    <div class="col-xs-12 clearfix text-center">
         <a ng-click="setFinalPrices()"
            ng-disabled="(originRateError || destinationRateError) || !(Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues())"
            class="btn btn-info btn-primary">
