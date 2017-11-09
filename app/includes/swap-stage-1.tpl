@@ -76,11 +76,13 @@
     <h1 translate="SWAP_init_1"> I want to swap my </h1>
     <br/>
 
-    <div ng-if="canShowSwap">
-        <div class="col-md-3 col-md-offset-1" style="margin-right: 50px">
-            <p style="margin-left: -175px; color: red; margin-top: -23px" ng-if="originRateError">{{originRateError}}</p>
+    <div ng-if="canShowSwap" class="swap-panel-input-container" style="">
+        <div class="spacer"></div>
+        <div class="swap-panel-input">
+            <p style="color: red; margin-top: -23px; margin-bottom: 0px;" ng-if="originRateError">{{originRateError}}</p>
             <input id="origin"
                    class="form-control"
+                   style="display: inline-block;"
                    type="text"
                    placeholder="{{ 'SEND_amount_short' | translate }}"
                    ng-change="updateEstimate(true)"
@@ -88,7 +90,7 @@
                    ng-click="showedMinMaxError = false"
                    ng-class="Validator.isPositiveNumber(swapOrder.fromVal)  && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
 
-            <div class="dropdown" style="margin-top: -48px; margin-left: 150px">
+            <div class="dropdown" style="display: inline-block;">
                 <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownFrom')">{{swapOrder.fromCoin}}<i
                         class="caret"></i></a>
                 <ul class="dropdown-menu dropdown-menu-right" ng-if="dropdownFrom">
@@ -100,15 +102,16 @@
             </div>
         </div>
 
-        <div class="col-md-1" style="margin-left: 60px">
+        <div class="swap-panel-input-container-text">
             <h1 translate="SWAP_init_2"> for </h1>
         </div>
 
-        <div class="col-md-3 col-md-offset-1" style="margin-left: 90px">
+        <div class="swap-panel-input">
             <p style="margin-left: -75px; color: red; margin-top: -23px" ng-if="destinationRateError">
                 {{destinationRateError}}</p>
             <input id="destination"
                    class="form-control"
+                   style="display: inline-block;"
                    type="text"
                    placeholder="{{ 'SEND_amount_short' | translate }}"
                    ng-change="updateEstimate(false)"
@@ -116,7 +119,7 @@
                    ng-click="showedMinMaxError = false"
                    ng-class="Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
 
-            <div class="dropdown" style="margin-top: -48px; margin-left: 150px">
+            <div class="dropdown" style="display: inline-block;">
                 <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownTo')">{{swapOrder.toCoin}}<i
                         class="caret"></i></a>
                 <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo">
@@ -128,6 +131,7 @@
                 </ul>
             </div>
         </div>
+        <div class="spacer"></div>
     </div>
 
     <div ng-if="!canShowSwap">
