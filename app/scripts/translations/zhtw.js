@@ -20,7 +20,7 @@ x_TxHash                    : '交易雜湊值',
 NAV_CheckTxStatus           : '檢查交易狀態',
 NAV_TxStatus                : '交易狀態',
 tx_Details                  : '交易細節',
-tx_Summary                  : 'During times of high volume (like during ICOs) transactions can be pending for hours, if not days. This tool aims to give you the ability to find and "cancel" / replace these TXs. ** This is not typically something you can do. It should not be relied upon & will only work when the TX Pools are full. [Please, read about this tool here.](https://myetherwallet.groovehq.com/knowledge_base/topics/how-can-i-check-on-the-status-of-my-transaction-can-i-cancel-override-overwrite-replace-or-do-anything-once-a-transaction-has-been-sent)**',
+tx_Summary                  : 'During times of high volume (like during ICOs) transactions can be pending for hours, if not days. This tool aims to give you the ability to find and "cancel" / replace these TXs. ** This is not typically something you can do. It should not be relied upon & will only work when the TX Pools are full. [Please, read about this tool here.](https://myetherwallet.github.io/knowledge-base/transactions/check-status-of-ethereum-transaction.html)**',
 tx_notFound                 : '查無交易',
 tx_notFound_1               : '無法在您所連接的節點之交易池找到這筆交易。',
 tx_notFound_2               : '如果您才剛送出交易，請等待 15 秒鐘後再按下 "檢查交易狀態" 按鈕。 ',
@@ -33,7 +33,7 @@ tx_foundInPending_3         : '您有機會 "取消" 或取代這筆交易。 �
 tx_FoundOnChain             : '找到交易',
 tx_FoundOnChain_1           : '您的交易已經成功被確認且存在於區塊鏈上。',
 tx_FoundOnChain_2           : '**If you see a red `( ! )`, a `BAD INSTRUCTION` or `OUT OF GAS` error message**, it means that the transaction was not successfully *sent*. You cannot cancel or replace this transaction. Instead, send a new transaction. If you received an "Out of Gas" error, you should double the gas limit you specified originally.',
-tx_FoundOnChain_3           : '**If you do not see any errors, your transaction was successfully sent.** Your ETH or Tokens are where you sent them. If you cannot see this ETH or Tokens credited in your other wallet / exchange account, and it has been 24+ hours since you sent, please [contact that service](https://myetherwallet.groovehq.com/knowledge_base/topics/i-have-a-question-but-its-not-about-myetherwallet-dot-com-what-do-i-do). Send them the *link* to your transaction and ask them, nicely, to look into your situation.',
+tx_FoundOnChain_3           : '**If you do not see any errors, your transaction was successfully sent.** Your ETH or Tokens are where you sent them. If you cannot see this ETH or Tokens credited in your other wallet / exchange account, and it has been 24+ hours since you sent, please [contact that service](https://myetherwallet.github.io/knowledge-base/diving-deeper/ethereum-list-of-support-and-communities.html). Send them the *link* to your transaction and ask them, nicely, to look into your situation.',
 
 /* Gen Wallet Updates */
 GEN_Help_1                  : '使用您的',
@@ -165,6 +165,10 @@ ADD_MetaMask                : 'Connect to MetaMask ',
 
 x_Trezor                    : 'TREZOR 錢包 ',
 ADD_Trezor_scan             : '連接至 TREZOR ',
+x_DigitalBitbox             : 'Digital Bitbox ',
+ADD_DigitalBitbox_0a        : 'Re-open MyEtherWallet on a secure (SSL) connection ',
+ADD_DigitalBitbox_0b        : '以 [Chrome](https://www.google.com/chrome/browser/desktop/) 或 [Opera](https://www.opera.com/) 瀏覽器重新開啟MyEtherWallet',
+ADD_DigitalBitbox_scan      : '連接至 Digital Bitbox ',
 
 /* Add Wallet */
 ADD_Label_1                 : '你想要做什麼？ ',
@@ -243,7 +247,7 @@ SENDModal_No                : '不，帶我離開這裡！ ',
 SENDModal_Yes               : '好，我確定！進行交易。 ',
 
 /* Tokens */
-TOKEN_Addr                  : '地址 ',
+TOKEN_Addr                  : '地址 Token ',
 TOKEN_Symbol                : '代幣縮寫 ',
 TOKEN_Dec                   : '小數點 ',
 TOKEN_show                  : '顯示所有代幣 ',
@@ -337,6 +341,7 @@ VIEWWALLET_Subtitle         : '這可以讓你下載不同版本的私鑰並且�
 VIEWWALLET_Subtitle_Short   : '這可以讓你下載不同版本的私鑰並且重新印製出你的紙錢包。 ',
 VIEWWALLET_SuccessMsg       : '成功！這些是你的錢包內容。 ',
 VIEWWALLET_ShowPrivKey      : '(show)',
+VIEWWALLET_HidePrivKey      : '(hide)',
 
 /* Chrome Extension */
 CX_error_1                  : '你沒有儲存過任何錢包。 點擊["新增錢包"](/cx-wallet.html#add-wallet)來新增一個錢包！ ',
@@ -378,7 +383,7 @@ ERROR_31                    : 'Please enter a valid secret phrase. ', // 31
 ERROR_32                    : 'Could not connect to the node. Refresh your page, try a different node (upper right corner), check your firewall settings. If custom node, check your configs.', // 32
 ERROR_33                    : 'The wallet you have unlocked does not match the owner\'s address. ', // 33
 ERROR_34                    : 'The name you are attempting to reveal does not match the name you have entered. ', // 34
-ERROR_35                    : 'Input address is not checksummed. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/not-checksummed-shows-when-i-enter-an-address" target="_blank" rel="noopener"> More info</a>', // 35
+ERROR_35                    : 'Input address is not checksummed. <a href="https://myetherwallet.github.io/knowledge-base/addresses/not-checksummed-shows-when-i-enter-an-address.html" target="_blank" rel="noopener noreferrer"> More info</a>', // 35
 ERROR_36                    : 'Enter valid TX hash', // 36
 ERROR_37                    : 'Enter valid hex string (0-9, a-f)', // 37
 

@@ -81,6 +81,31 @@
     }
   }
 
+  .swap-panel-input-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    .spacer {
+      flex-grow: 1;
+      @media screen and (max-width: 710px) {
+        flex-grow: 0;
+      }
+    }
+    .swap-panel-input-container-text,
+    .swap-panel-input {
+      margin: 0px;
+      padding: 0px 16px;
+      @media screen and (max-width: 710px) {
+        flex-grow: 1;
+        width: 100%
+      }
+    }
+    .swap-panel-input-container-text > h1 {
+      margin: 0px;
+      line-height: unset;
+    }
+  }
+
   .swap-address {
     text-align: center;
     padding: @space*3 @space;

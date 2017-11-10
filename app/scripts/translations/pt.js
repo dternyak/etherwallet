@@ -20,7 +20,7 @@ x_TxHash                    : 'TX Hash',
 NAV_CheckTxStatus           : 'Check TX Status',
 NAV_TxStatus                : 'TX Status',
 tx_Details                  : 'Transaction Details',
-tx_Summary                  : 'During times of high volume (like during ICOs) transactions can be pending for hours, if not days. This tool aims to give you the ability to find and "cancel" / replace these TXs. ** This is not typically something you can do. It should not be relied upon & will only work when the TX Pools are full. [Please, read about this tool here.](https://myetherwallet.groovehq.com/knowledge_base/topics/how-can-i-check-on-the-status-of-my-transaction-can-i-cancel-override-overwrite-replace-or-do-anything-once-a-transaction-has-been-sent)**',
+tx_Summary                  : 'During times of high volume (like during ICOs) transactions can be pending for hours, if not days. This tool aims to give you the ability to find and "cancel" / replace these TXs. ** This is not typically something you can do. It should not be relied upon & will only work when the TX Pools are full. [Please, read about this tool here.](https://myetherwallet.github.io/knowledge-base/transactions/check-status-of-ethereum-transaction.html)**',
 tx_notFound                 : 'Transaction Not Found',
 tx_notFound_1               : 'This TX cannot be found in the TX Pool of the node you are connected to.',
 tx_notFound_2               : 'If you just sent the transaction, please wait 15 seconds and press the "Check TX Status" button again. ',
@@ -33,7 +33,7 @@ tx_foundInPending_3         : 'There is a chance you can "cancel" or replace thi
 tx_FoundOnChain             : 'Transaction Found',
 tx_FoundOnChain_1           : 'Your transaction was successfully mined and is on the blockchain.',
 tx_FoundOnChain_2           : '**If you see a red `( ! )`, a `BAD INSTRUCTION` or `OUT OF GAS` error message**, it means that the transaction was not successfully *sent*. You cannot cancel or replace this transaction. Instead, send a new transaction. If you received an "Out of Gas" error, you should double the gas limit you specified originally.',
-tx_FoundOnChain_3           : '**If you do not see any errors, your transaction was successfully sent.** Your ETH or Tokens are where you sent them. If you cannot see this ETH or Tokens credited in your other wallet / exchange account, and it has been 24+ hours since you sent, please [contact that service](https://myetherwallet.groovehq.com/knowledge_base/topics/i-have-a-question-but-its-not-about-myetherwallet-dot-com-what-do-i-do). Send them the *link* to your transaction and ask them, nicely, to look into your situation.',
+tx_FoundOnChain_3           : '**If you do not see any errors, your transaction was successfully sent.** Your ETH or Tokens are where you sent them. If you cannot see this ETH or Tokens credited in your other wallet / exchange account, and it has been 24+ hours since you sent, please [contact that service](https://myetherwallet.github.io/knowledge-base/diving-deeper/ethereum-list-of-support-and-communities.html). Send them the *link* to your transaction and ask them, nicely, to look into your situation.',
 
 /* Gen Wallet Updates */
 GEN_Help_1                  : 'Use your',
@@ -100,6 +100,7 @@ x_JsonDesc                  : 'Este é o descriptografado, formato JSON da sua c
 x_Keystore                  : 'Arquivo de armazenamento de chaves (UTC / JSON · Recomendado · Criptografado) ',
 x_Keystore2                 : 'Arquivo de armazenamento de chaves (UTC / JSON) ',
 x_KeystoreDesc              : 'Este arquivo de armazenamento de chaves corresponde ao formato usado pela Mist para que você possa facilmente importá-lo no futuro. É recomendado que o arquivo seja transferido e feito seu backup. ',
+x_MetaMask                  : 'Metamask / Mist ',
 x_Mnemonic                  : 'Frase Mnemonic ',
 x_ParityPhrase              : 'Parity Phrase ',
 x_Password                  : 'Senha ',
@@ -154,6 +155,11 @@ ADD_Radio_3                 : 'Cole/Digite sua Chave Privada ',
 ADD_Radio_4                 : 'Adicionar uma conta para ver ',
 ADD_Radio_5                 : 'Cole/Digite sua Mnemonic ',
 ADD_Radio_5_Path            : 'Select HD derivation path ',
+ADD_Radio_5_woTrezor        : '(Jaxx, Metamask, Exodus, imToken)',
+ADD_Radio_5_withTrezor      : '(Jaxx, Metamask, Exodus, imToken, TREZOR)',
+ADD_Radio_5_PathAlternative : '(Ledger)',
+ADD_Radio_5_PathTrezor      : '(TREZOR)',
+ADD_Radio_5_PathCustom      : 'Custom',
 ADD_Label_2                 : 'Crie um Apelido: ',
 ADD_Label_3                 : 'Sua carteira é criptografada. Por favor, insira a senha ',
 ADD_Label_4                 : 'Adicionar uma conta para ver ',
@@ -162,6 +168,7 @@ ADD_Label_5                 : 'Insira o Endereço ',
 ADD_Label_6                 : 'Desbloqueie sua Carteira ',
 ADD_Label_6_short           : 'Desbloqueie ',
 ADD_Label_7                 : 'Adicionar Conta ',
+ADD_Label_8                 : 'Password (optional): ',
 
 /* Generate Wallets */
 GEN_desc                    : 'Se você quer gerar multiplas carteiras. você pode fazer isso aqui ',
@@ -198,7 +205,7 @@ SENDModal_No                : 'Não, me tire daqui! ',
 SENDModal_Yes               : 'Sim, eu tenho certeza! Faça a transação. ',
 
 /* Tokens */
-TOKEN_Addr                  : 'Endereço ',
+TOKEN_Addr                  : 'Endereço do Token Contract ',
 TOKEN_Symbol                : 'Símbolo do Token ',
 TOKEN_Dec                   : 'Decimais ',
 TOKEN_show                  : 'Mostre todos os Tokens ',
@@ -266,6 +273,8 @@ MYWAL_Content_3             : 'Se pretender utilizar esta carteira com o MyEther
 VIEWWALLET_Subtitle         : 'This allows you to download different versions of private keys and re-print your paper wallet. You may want to do this in order to [import your account into Geth/Mist](http://ethereum.stackexchange.com/questions/465/how-to-import-a-plain-private-key-into-geth/). If you want to check your balance, we recommend using a blockchain explorer like [etherscan.io](http://etherscan.io/). ',
 VIEWWALLET_Subtitle_Short   : 'This allows you to download different versions of private keys and re-print your paper wallet. ',
 VIEWWALLET_SuccessMsg       : 'Success! Here are your wallet details. ',
+VIEWWALLET_ShowPrivKey      : '(show)',
+VIEWWALLET_HidePrivKey      : '(hide)',
 
 /* Mnemonic */
 MNEM_1                      : 'Por favor, selecione o endereço com o qual você gostaria de interagir. ',
@@ -286,6 +295,11 @@ WARN_Send_Link              : 'Você chegou através de um link que tem o endere
 x_Trezor                    : 'TREZOR ',
 ADD_Trezor_scan             : 'Connect to TREZOR ',
 ADD_Trezor_select           : 'This is a TREZOR seed ',
+x_DigitalBitbox             : 'Digital Bitbox ',
+ADD_DigitalBitbox_0a        : 'Re-abra MyEtherWallet em uma conexão (SSL) segura ',
+ADD_DigitalBitbox_0b        : 'Re-abra MyEtherWallet usando [Chrome](https://www.google.com/chrome/browser/desktop/) ou [Opera](https://www.opera.com/) ',
+ADD_DigitalBitbox_scan      : 'Conectar-se a Digital Bitbox ',
+ADD_MetaMask                : 'Connect to MetaMask ',
 
 /* Node Switcher */
 NODE_Title                  : 'Set Up Your Custom Node',
@@ -322,6 +336,7 @@ SWAP_rec_add                : "Your Receiving Address ",
 SWAP_start_CTA              : "Start Swap ",
 SWAP_ref_num                : "Your reference number ",
 SWAP_time                   : "Time remaining to send ",
+SWAP_elapsed				        : "Time elapsed since sent ",
 SWAP_progress_1             : "Order Initiated ",
 SWAP_progress_2             : "Waiting for your ", // Waiting for your BTC...
 SWAP_progress_3             : "Received! ", // ETH Received!
@@ -379,7 +394,9 @@ ERROR_31                    : 'Please enter a valid secret phrase. ', // 31
 ERROR_32                    : 'Could not connect to the node. Refresh your page, try a different node (upper right corner), check your firewall settings. If custom node, check your configs.', // 32
 ERROR_33                    : 'The wallet you have unlocked does not match the owner\'s address. ', // 33
 ERROR_34                    : 'The name you are attempting to reveal does not match the name you have entered. ', // 34
-ERROR_35                    : 'Input address is not checksummed. <a href="https://myetherwallet.groovehq.com/knowledge_base/topics/not-checksummed-shows-when-i-enter-an-address" target="_blank" rel="noopener"> More info</a>', // 35
+ERROR_35                    : 'Input address is not checksummed. <a href="https://myetherwallet.github.io/knowledge-base/addresses/not-checksummed-shows-when-i-enter-an-address.html" target="_blank" rel="noopener noreferrer"> More info</a>', // 35
+ERROR_36                    : 'Enter valid TX hash', // 36
+ERROR_37                    : 'Enter valid hex string (0-9, a-f)', // 37
 
 SUCCESS_1                   : 'Valid address ',
 SUCCESS_2                   : 'Wallet successfully decrypted ',

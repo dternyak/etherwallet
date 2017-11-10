@@ -41,20 +41,39 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             curVal: 21,
             value: globalFuncs.localStorage.getItem(gasPriceKey, null) ? parseInt(globalFuncs.localStorage.getItem(gasPriceKey)) : 21,
             max: 60,
-            min: 1
+            min: 0.1,
+            step: 0.1
         }
         ethFuncs.gasAdjustment = $scope.gas.value;
     }
     setGasValues();
     $scope.gasChanged();
 
+    function makeNewNode(key) {
+      var curNode;
+      if ($scope.nodeList[key]) {
+        curNode = $scope.nodeList[key];
+      } else {
+        curNode = $scope.nodeList[$scope.defaultNodeKey];
+      }
+      return curNode;
+    }
 
+    var networkHasChanged = false;
     $scope.changeNode = function(key) {
-        if ($scope.nodeList[key]) {
-            $scope.curNode = $scope.nodeList[key];
+        var newNode = makeNewNode(key);
+        if (!$scope.curNode) {
+          networkHasChanged = false;
+          $scope.curNode = newNode;
         } else {
-            $scope.curNode = $scope.nodeList[$scope.defaultNodeKey];
+          if ($scope.curNode.type !== newNode.type) {
+            networkHasChanged = true;
+          } else {
+            networkHasChanged = false;
+          }
+          $scope.curNode = newNode;
         }
+
         $scope.dropdownNode = false;
         Token.popTokens = $scope.curNode.tokenList;
         ajaxReq['key'] = key;
@@ -66,6 +85,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
             key: key
         }));
         if (nodes.ensNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = false;
+        if (nodes.domainsaleNodeTypes.indexOf($scope.curNode.type) == -1) $scope.tabNames.domainsale.cx = $scope.tabNames.domainsale.mew = false;
         else $scope.tabNames.ens.cx = $scope.tabNames.ens.mew = true;
         ajaxReq.getCurrentBlock(function(data) {
             if (data.error) {
@@ -73,16 +93,20 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
                 $scope.notifier.danger(globalFuncs.errorMsgs[32]);
             } else {
                 $scope.nodeIsConnected = true;
-                $scope.notifier.info( globalFuncs.successMsgs[5] + '— Now, check the URL: <strong>' + window.location.href + '.</strong> <br /> Network: <strong>' + $scope.nodeType + ' </strong> provided by <strong>' + $scope.nodeService + '.</strong>', 10)
+                $scope.notifier.info( globalFuncs.successMsgs[5] + '— Now, check the URL: <strong>' + window.location.href + '.</strong> <br /> Network: <strong>' + $scope.nodeType + ' </strong> provided by <strong>' + $scope.nodeService + '.</strong>', 5000)
             }
         });
+        networkHasChanged && window.setTimeout(function() {location.reload() }, 250)
     }
     $scope.checkNodeUrl = function(nodeUrl) {
         return $scope.Validator.isValidURL(nodeUrl);
     }
     $scope.setCurNodeFromStorage = function() {
         var node = globalFuncs.localStorage.getItem('curNode', null);
-        if (node == null) {
+        if (node === JSON.stringify({"key":"eth_metamask"})) {
+          node = JSON.stringify({"key":"eth_infura"})
+        }
+       if (node == null) {
             $scope.changeNode($scope.defaultNodeKey);
         } else {
             node = JSON.parse(node);
@@ -159,11 +183,6 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     $scope.setTab = function(hval) {
         if (hval != '') {
             hval = hval.replace('#', '');
-            //          //Check if URL contains Parameters
-            //          if(hval.indexOf('=') != -1) {
-            //              //Remove URL parameter from hval
-            //              hval = hval.substring(0,hval.indexOf('='));
-            //          }
             for (var key in $scope.tabNames) {
                 if ($scope.tabNames[key].url == hval) {
                     $scope.activeTab = globalService.currentTab = $scope.tabNames[key].id;
@@ -178,6 +197,7 @@ var tabsCtrl = function($scope, globalService, $translate, $sce) {
     $scope.setTab(hval);
 
     $scope.tabClick = function(id) {
+        globalService.tokensLoaded = false
         $scope.activeTab = globalService.currentTab = id;
         for (var key in $scope.tabNames) {
             if ($scope.tabNames[key].id == id) location.hash = $scope.tabNames[key].url;
