@@ -42,10 +42,6 @@ var shapeShiftService = function($http) {
         .then(function(resp) {
           return resp.data;
         })
-        .catch(function(err) {
-          err.error = true;
-          return err;
-        });
     },
 
     // pair: [pair],
@@ -74,10 +70,6 @@ var shapeShiftService = function($http) {
         .then(function(resp) {
           return resp.data;
         })
-        .catch(function(err) {
-          err.error = true;
-          return err;
-        });
     },
 
     getPairRateFromMarketInfo: function(originKind, destinationKind, marketInfo) {
@@ -110,10 +102,6 @@ var shapeShiftService = function($http) {
         .then(function(resp) {
           return resp.data;
         })
-        .catch(function(err) {
-          err.error = true;
-          return err;
-        });
     },
 
     onlyAvailableCoins: function(coinsObj) {
@@ -141,15 +129,7 @@ var shapeShiftService = function($http) {
             .then(function(coinDataWithRates) {
               return coinDataWithRates;
             })
-            .catch(function(err) {
-              err.error = true;
-              return err;
-            })
         })
-        .catch(function(err) {
-          err.error = true;
-          return err;
-        });
     },
 
     getWhiteListedCoins: function(coinsObj, whiteListSymbolArray) {
@@ -182,10 +162,6 @@ var shapeShiftService = function($http) {
         });
         return coinsObj;
       })
-        .catch(function (err) {
-          err.error = true;
-          return err;
-        })
     }
   };
 };
