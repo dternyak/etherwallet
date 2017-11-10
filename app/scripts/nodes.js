@@ -15,7 +15,8 @@ nodes.nodeTypes = {
     UBQ: "UBQ",
     Custom: "CUSTOM ETH"
 };
-nodes.ensNodeTypes = [nodes.nodeTypes.ETH, nodes.nodeTypes.Ropsten];
+nodes.domainsaleNodeTypes = [nodes.nodeTypes.Ropsten]
+nodes.ensNodeTypes = [nodes.nodeTypes.ETH, nodes.nodeTypes.Ropsten]
 nodes.customNodeObj = {
     'name': 'CUS',
     'blockExplorerTX': '',
@@ -41,18 +42,6 @@ nodes.nodeList = {
         'service': 'MyEtherWallet',
         'lib': new nodes.customNode('https://api.myetherapi.com/eth', '')
     },
-    'eth_metamask': {
-        'name': 'ETH',
-        'blockExplorerTX': 'https://etherscan.io/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://etherscan.io/address/[[address]]',
-        'type': nodes.nodeTypes.ETH,
-        'eip155': true,
-        'chainId': 1,
-        'tokenList': require('./tokens/ethTokens.json'),
-        'abiList': require('./abiDefinitions/ethAbi.json'),
-        'service': 'MetaMask/Mist',
-        'lib': new nodes.metamaskNode()
-    },
     'eth_ethscan': {
         'name': 'ETH',
         'blockExplorerTX': 'https://etherscan.io/tx/[[txHash]]',
@@ -76,6 +65,18 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/ethAbi.json'),
         'service': 'infura.io',
         'lib': new nodes.infuraNode('https://mainnet.infura.io/mew')
+    },
+    'eth_giveth': {
+        'name': 'ETH',
+        'blockExplorerTX': 'https://etherscan.io/tx/[[txHash]]',
+        'blockExplorerAddr': 'https://etherscan.io/address/[[address]]',
+        'type': nodes.nodeTypes.ETH,
+        'eip155': true,
+        'chainId': 1,
+        'tokenList': require('./tokens/ethTokens.json'),
+        'abiList': require('./abiDefinitions/ethAbi.json'),
+        'service': 'Giveth.io',
+        'lib': new nodes.customNode('https://mew.giveth.io', '')
     },
     'etc_epool': {
         'name': 'ETC',
@@ -175,30 +176,6 @@ nodes.nodeList = {
         'service': 'Expanse.tech',
         'lib': new nodes.customNode('https://node.expanse.tech/', '')
     },
-    'music_tfarm': {
-        'name': 'MUSIC',
-        'blockExplorerTX': 'https://orbiter.musicoin.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://orbiter.musicoin.org/addr/[[address]]',
-        'type': nodes.nodeTypes.MUS,
-        'eip155': false,
-        'chainId': 7762959,
-        'tokenList': require('./tokens/musicTokens.json'),
-        'abiList': require('./abiDefinitions/musicAbi.json'),
-        'service': 'trustfarm.io',
-        'lib': new nodes.customNode('https://mcdnode.trustfarm.io/api', '')
-    },
-    'music_twmc': {
-        'name': 'MUSIC',
-        'blockExplorerTX': 'https://orbiter.musicoin.org/tx/[[txHash]]',
-        'blockExplorerAddr': 'https://orbiter.musicoin.org/addr/[[address]]',
-        'type': nodes.nodeTypes.MUS,
-        'eip155': false,
-        'chainId': 7762959,
-        'tokenList': require('./tokens/musicTokens.json'),
-        'abiList': require('./abiDefinitions/musicAbi.json'),
-        'service': 'pool.musicoin.tw',
-        'lib': new nodes.customNode('https://mewapi.musicoin.tw', '')
-    },
     'ubq': {
         'name': 'UBQ',
         'blockExplorerTX': 'https://ubiqscan.io/en/tx/[[txHash]]',
@@ -210,7 +187,7 @@ nodes.nodeList = {
         'abiList': require('./abiDefinitions/ubqAbi.json'),
         'estimateGas': true,
         'service': 'ubiqscan.io',
-        'lib': new nodes.customNode('https://rpc1.ubiqscan.io', '')
+        'lib': new nodes.customNode('https://pyrus2.ubiqscan.io', '')
     }
 };
 

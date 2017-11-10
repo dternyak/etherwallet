@@ -45,6 +45,9 @@ textarea {
 
 .annoucement-danger {
   background-color: @brand-danger;
+  &:hover {
+    background-color: darken(@brand-orangered, 5%);
+  }
   a:hover,
   a:focus {
     color: darken(white, 5%);
@@ -215,7 +218,7 @@ textarea {
     min-width: 200px;
     width: 100%;
     td {
-      padding: .4rem;
+      padding: .3rem;
       line-height: 1;
     }
     td:first-child {
@@ -316,6 +319,7 @@ input[type="password"]+.eye {
 
 .token-balances {
   margin-bottom: 15px;
+  font-size: 14px;
 }
 
 h2 a.isActive {
@@ -532,8 +536,8 @@ label small {
   li:nth-child(10),
   li:nth-child(11),
   li:nth-child(12),
-  li:nth-child(14),
-  li:nth-child(15) {
+  li:nth-child(13),
+  li:nth-child(14) {
     border-bottom: 1px solid @gray-lighter;
   }
 }
@@ -603,3 +607,5 @@ header.UBQ {
   & + .container .modal-content          { border: 0.25rem solid @brand-ubq;      }
   & + .container .alert-info             { background-color:@brand-ubq;           }
 }
+
+

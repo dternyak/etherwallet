@@ -168,12 +168,13 @@
 
 
 .footer {
-  background-color: @ether-navy;
+  background-color: @ether-navy-dark;
   color: white;
   font-size: .8rem;
+  margin-top: 0;
   h5{
-    font-size: .95rem;
-    margin: .25em 0 0;
+    margin-top: .5rem;
+    margin-bottom: .25rem;
     i {
       margin-left: -1.5em;
       margin-right: .25em;
@@ -181,10 +182,6 @@
     &:first-child {
       margin-top: 0;
     }
-  }
-  .modal,
-  .modal p {
-    color: @text-color;
   }
   ul {
     list-style: none;
@@ -253,19 +250,52 @@
   flex-grow: 1;
 }
 
-.custom-token-fields input {
-  .input-sm();
-  .mono {
-    font-size: @font-size-xs;
+.footer__icon {
+  display: inline-block;
+  height: 30px;
+  width: 30px;
+  padding: 5px;
+}
+
+.footer__pill-wrap {
+  flex-direction: row;
+}
+
+a.footer__pill {
+  display: inline;
+  background: @brand-primary;
+  padding: 3px 12px;
+  border-radius: 30px;
+  color: white;
+  &:focus,
+  &:hover {
+    color: #0e97c0;
+    background: white;
+    opacity: 1;
+  }
+}
+
+
+.custom-token-fields {
+  input {
+    .input-sm();
+    .mono {
+      font-size: @font-size-xs;
+    }
+  }
+  .address-identicon-container {
+    margin-top: 2rem;
   }
 }
 
 .swap--usd,
 .swap--btc,
-.swap--hw {
+.swap--hw,
+.swap--ss {
   text-align:center;
   display: flex;
   padding: 1rem .15rem;
+  min-height: 105px;
   .col-sm-7 {
     display: flex;
     flex-direction: column;
@@ -281,6 +311,7 @@
     background-color: lighten(saturate(#2B71B1, 7%), 8%);
   }
 }
+
 .swap--btc {
   .block--text-white();
   background-color: #006e79;
@@ -299,6 +330,20 @@
   }
   .swap__logo {
     margin: .45rem 0;
+  }
+}
+
+.swap--ss {
+  .block--text-white();
+  background-color: #3a526d;
+  .swap-flag--bal,
+  .swap-flag--price {
+    background-color: #5478a0;
+  }
+  .swap__logo {
+    position: relative;
+    top: 50%;
+    transform: translatey(-50%);
   }
 }
 
@@ -340,4 +385,44 @@
 
 .send-modal__addr {
   font-size: 12px;
+}
+
+
+
+.u__protip {
+  display: table;
+  &:before {
+    content: "";
+    display: table-cell;
+    width: 2em;
+    height: 1em;
+    background-image: url(../images/icon-protip.svg);
+    background-size: contain;
+    vertical-align: middle;
+    text-align: center;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    border-right: .5em solid transparent;
+  }
+}
+
+.send__load-tokens {
+  padding: 5px 2px;
+  margin: 0;
+  background-color: @brand-warning;
+  text-align: center;
+  color: white;
+  font-size: 9px;
+  img {
+    width: 14px;
+    height: 14px;
+  }
+  p {
+    margin: 4px 0 0;
+    font-weight: 500;
+  }
+  &:hover {
+    color: white;
+    opacity: .8;
+  }
 }
