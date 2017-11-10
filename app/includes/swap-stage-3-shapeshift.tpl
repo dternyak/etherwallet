@@ -1,4 +1,4 @@
-<article class="swap-order" ng-show="showStage3ShapeShift">
+<article class="swap-order" ng-if="showStage3ShapeShift">
 
 
     <!-- Title -->
@@ -69,20 +69,24 @@
         </div>
     </section>
 
+    <article class="row text-center" ng-if="orderIsExpired">
+        <h1 style="color: red">Your order has expired!</h1>
+    </article>
+
 
     <!-- Swap CTA -->
-    <section class="row text-center" ng-show="orderResult.progress.status=='OPEN'">
+    <section class="row text-center" ng-if="!orderIsExpired">
         <h1>
             <span translate="SWAP_order_CTA">      Please send                                                 </span>
             <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
             <span translate="SENDModal_Content_2"> to address                                                  </span><br/>
-            <strong class="mono text-primary"> {{orderResult.payment_address}} </strong>
+            <strong class="mono text-primary"> {{orderResult.deposit}} </strong>
         </h1>
     </section>
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-show="showStage3Eth">
+    <article class="row" ng-if="showStage3Eth && !orderIsExpired">
         <section class="clearfix collapse-container">
             <div class="text-center" ng-click="wd = !wd">
                 <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
@@ -112,6 +116,7 @@
             @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
         </section>
     </article>
+
     <!-- / Swap CTA ETH -->
 
 

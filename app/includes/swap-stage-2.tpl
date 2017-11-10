@@ -1,5 +1,5 @@
 <!-- Swap Start 2 -->
-<article class="swap-start" ng-show="showStage2">
+<article class="swap-start" ng-if="showStage2">
 
 
     <!-- Title -->

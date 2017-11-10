@@ -1,5 +1,5 @@
 <!-- Swap Rates Panel -->
-<article class="swap-rates" ng-show="showStage1">
+<article class="swap-rates" ng-if="showStage1">
 
     <!-- Title -->
     <section class="row">
