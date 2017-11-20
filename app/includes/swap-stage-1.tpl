@@ -37,21 +37,21 @@
             <div class="col-sm-6 order-info">
                 <p class="mono">
                     <input class="form-control input-sm" value="1" disabled="true"/>
-                    <span>ETH = {{shapeShiftCoinData['ETC']['RATES']['ETH'].rate}} ETC</span>
+                    <span>ETH = {{shapeShiftCoinData[getOrSetRandomShapeShiftRateToken(0)]['RATES']['ETH'].rate}} {{getOrSetRandomShapeShiftRateToken(0)}}</span>
                 </p>
                 <p class="mono">
                     <input class="form-control input-sm" value="1" disabled="true"/>
-                    <span>ETH = {{shapeShiftCoinData['SNT']['RATES']['ETH'].rate}} SNT</span>
+                    <span>ETH = {{shapeShiftCoinData[getOrSetRandomShapeShiftRateToken(1)]['RATES']['ETH'].rate}} {{getOrSetRandomShapeShiftRateToken(1)}}</span>
                 </p>
             </div>
             <div class="col-sm-6 order-info">
                 <p class="mono">
                     <input class="form-control input-sm" value="1" disabled="true"/>
-                    <span>ETH = {{shapeShiftCoinData['GNT']['RATES']['ETH'].rate}} GNT</span>
+                    <span>ETH = {{shapeShiftCoinData[getOrSetRandomShapeShiftRateToken(2)]['RATES']['ETH'].rate}} {{getOrSetRandomShapeShiftRateToken(2)}}</span>
                 </p>
                 <p class="mono">
                     <input class="form-control input-sm" value="1" disabled="true"/>
-                    <span>ETH = {{shapeShiftCoinData['REP']['RATES']['ETH'].rate}} REP</span>
+                    <span>ETH = {{shapeShiftCoinData[getOrSetRandomShapeShiftRateToken(3)]['RATES']['ETH'].rate}} {{getOrSetRandomShapeShiftRateToken(3)}}</span>
                 </p>
             </div>
         </div>
@@ -98,7 +98,7 @@
                 <ul class="dropdown-menu dropdown-menu-right" ng-if="dropdownFrom">
                     <li ng-repeat="coin in availableCoins track by $index">
                         <a ng-class="{true:'active'}[coin == swapOrder.fromCoin]" ng-click="setOrderCoin(true, coin)">
-                            {{coin}} </a>
+                            {{getNameFromSymbol(coin)}} ({{coin}}) </a>
                     </li>
                 </ul>
             </div>
@@ -128,7 +128,7 @@
                     <li ng-repeat="coin in allAvailableDestinationCoins track by $index"
                         ng-show="coin != swapOrder.fromCoin">
                         <a ng-class="{true:'active'}[coin == swapOrder.toCoin]" ng-click="setOrderCoin(false, coin)">
-                            {{coin}} </a>
+                          {{getNameFromSymbol(coin)}} ({{coin}}) </a>
                     </li>
                 </ul>
             </div>

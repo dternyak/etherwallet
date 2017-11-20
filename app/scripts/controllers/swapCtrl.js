@@ -22,13 +22,43 @@ let swapCtrl = function($scope, shapeShiftService) {
   $scope.allAvailableDestinationCoins = [];
   $scope.availableCoins = ['ETH', 'BTC'];
   $scope.shapeShiftWhitelistCoins = ['ETC', 'ZRX', 'SNT', 'ANT', 'BAT', 'GNT', 'BNT', 'REP'];
+  $scope.randomRatesTokens = {
+    0: null,
+    1: null,
+    2: null,
+    3: null
+  };
   $scope.canShowSwap = false;
+
+  function pickRandomProperty(obj) {
+    let result;
+    let count = 0;
+    for (var prop in obj) if (Math.random() < 1 / ++count) result = prop;
+    return result;
+  }
+
+  $scope.getOrSetRandomShapeShiftRateToken = function(index) {
+    if (!$scope.randomRatesTokens[index]) {
+      while (true) {
+        let tokenSymbol = pickRandomProperty($scope.shapeShiftCoinData);
+        if (!(Object.values($scope.randomRatesTokens).indexOf(tokenSymbol) > -1)) {
+          $scope.randomRatesTokens[index] = tokenSymbol;
+          return tokenSymbol;
+        }
+      }
+    } else {
+      return $scope.randomRatesTokens[index];
+    }
+  };
 
   $scope.getNameFromSymbol = function(symbol) {
     if (symbol === 'BTC') {
       return 'Bitcoin';
     } else if (symbol === 'ETH') {
       return 'Ethereum';
+      // shortend from Golem-Network-Tokens
+    } else if (symbol === 'GNT') {
+      return 'Golem';
     } else {
       return $scope.shapeShiftCoinData[symbol].name;
     }
@@ -76,11 +106,11 @@ let swapCtrl = function($scope, shapeShiftService) {
     shapeShiftService
       .getAvailableCoins($scope.shapeShiftWhitelistCoins)
       .then(function(shapeShiftCoinData) {
-        console.log(shapeShiftCoinData);
         $scope.shapeShiftCoinData = shapeShiftCoinData;
         $scope.loadedShapeShiftRates = true;
+        // not shapeShiftWhitelistCoins in case coin is not returned by `getcoins`
         $scope.allAvailableDestinationCoins = $scope.allAvailableDestinationCoins.concat(
-          $scope.shapeShiftWhitelistCoins
+          Object.keys(shapeShiftCoinData)
         );
         checkCanShowRates();
       })
