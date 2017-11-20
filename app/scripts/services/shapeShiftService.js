@@ -37,11 +37,9 @@ var shapeShiftService = function($http) {
     //   error: [Text describing failure]
     // }
     checkStatus: function(address) {
-      return $http
-        .get(`${shapeShiftAPI}/txStat/${address}`)
-        .then(function(resp) {
-          return resp.data;
-        })
+      return $http.get(`${shapeShiftAPI}/txStat/${address}`).then(function(resp) {
+        return resp.data;
+      });
     },
 
     // pair: [pair],
@@ -65,11 +63,9 @@ var shapeShiftService = function($http) {
     },
 
     getMarketInfo: function() {
-      return $http
-        .get(`${shapeShiftAPI}/marketinfo`)
-        .then(function(resp) {
-          return resp.data;
-        })
+      return $http.get(`${shapeShiftAPI}/marketinfo`).then(function(resp) {
+        return resp.data;
+      });
     },
 
     getPairRateFromMarketInfo: function(originKind, destinationKind, marketInfo) {
@@ -97,11 +93,9 @@ var shapeShiftService = function($http) {
     },
 
     getTimeRemaining: function(address) {
-      return $http
-        .get(`${shapeShiftAPI}/timeremaining/${address}`)
-        .then(function(resp) {
-          return resp.data;
-        })
+      return $http.get(`${shapeShiftAPI}/timeremaining/${address}`).then(function(resp) {
+        return resp.data;
+      });
     },
 
     onlyAvailableCoins: function(coinsObj) {
@@ -116,26 +110,25 @@ var shapeShiftService = function($http) {
 
     getAvailableCoins: function(whiteListSymbolArray) {
       let that = this;
-      return $http
-        .get(`${shapeShiftAPI}/getcoins`)
-        .then(function(resp) {
-          let availableCoins = that.onlyAvailableCoins(resp.data);
-          let whiteListedAvailableCoins = that.getWhiteListedCoins(
-            availableCoins,
-            whiteListSymbolArray
-          );
-          return that
-            .attachRatesToCoins(whiteListedAvailableCoins)
-            .then(function(coinDataWithRates) {
-              return coinDataWithRates;
-            })
-        })
+      return $http.get(`${shapeShiftAPI}/getcoins`).then(function(resp) {
+        let availableCoins = that.onlyAvailableCoins(resp.data);
+        let whiteListedAvailableCoins = that.getWhiteListedCoins(
+          availableCoins,
+          whiteListSymbolArray
+        );
+        return that.attachRatesToCoins(whiteListedAvailableCoins).then(function(coinDataWithRates) {
+          return coinDataWithRates;
+        });
+      });
     },
 
     getWhiteListedCoins: function(coinsObj, whiteListSymbolArray) {
       let filteredObj = {};
       whiteListSymbolArray.forEach(function(each) {
-        filteredObj[each] = coinsObj[each];
+        let coin = coinsObj[each];
+        if (coin) {
+          filteredObj[each] = coin;
+        }
       });
       return filteredObj;
     },
@@ -161,7 +154,7 @@ var shapeShiftService = function($http) {
           });
         });
         return coinsObj;
-      })
+      });
     }
   };
 };
