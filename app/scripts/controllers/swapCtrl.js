@@ -33,7 +33,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   function pickRandomProperty(obj) {
     let result;
     let count = 0;
-    for (var prop in obj) if (Math.random() < 1 / ++count) result = prop;
+    for (let prop in obj) if (Math.random() < 1 / ++count) result = prop;
     return result;
   }
 
@@ -71,16 +71,6 @@ let swapCtrl = function($scope, shapeShiftService) {
   let timeOutMessage =
     "Time has run out. If you have already sent, please wait 1 hour. If your order has not be processed after 1 hour, please press the orange 'Issue with your Swap?' button.";
 
-  $scope.bity.refreshRates(function() {
-    if (!$scope.showStage3ShapeShift) {
-      $scope.loadedBityRates = true;
-      $scope.allAvailableDestinationCoins = $scope.allAvailableDestinationCoins.concat(
-        $scope.availableCoins
-      );
-      $scope.setOrderCoin(true, 'ETH');
-    }
-  });
-
   let checkCanShowRates = function() {
     if ($scope.loadedShapeShiftRates && $scope.loadedBityRates) {
       $scope.canShowSwap = true;
@@ -90,16 +80,24 @@ let swapCtrl = function($scope, shapeShiftService) {
     }
   };
 
-  setInterval(function() {
+  function handleBityRatesRequest() {
     $scope.bity.refreshRates(function() {
       if (!$scope.loadedBityRates) {
         $scope.allAvailableDestinationCoins = $scope.allAvailableDestinationCoins.concat(
           $scope.availableCoins
         );
-        $scope.loadedBityRates = true;
       }
+      if (!$scope.loadedBityRates) {
+        $scope.setOrderCoin(true, 'ETH');
+      }
+      $scope.loadedBityRates = true;
       checkCanShowRates();
     });
+  }
+
+  handleBityRatesRequest();
+  setInterval(function() {
+    handleBityRatesRequest();
   }, 30000);
 
   $scope.getAvailableShapeShiftCoins = function() {
@@ -164,40 +162,42 @@ let swapCtrl = function($scope, shapeShiftService) {
   }
 
   $scope.verifyMinMaxValuesBity = function() {
-    let BTCMinimum = bity.min;
-    let BTCMaximum = bity.max;
-    if ($scope.swapOrder.fromCoin === 'BTC') {
-      if ($scope.swapOrder.fromVal < BTCMinimum) {
-        $scope.originRateError = `Minimum BTC amount is ${BTCMinimum}`;
-        return false;
-      }
-      if ($scope.swapOrder.fromVal > BTCMaximum) {
-        $scope.originRateError = `Maximum BTC amount is ${BTCMaximum}`;
-        return false;
-      }
-      $scope.originRateError = null;
-      $scope.destinationRateError = null;
-      return true;
-    } else if ($scope.swapOrder.fromCoin === 'ETH') {
-      let ETHMinimum = BTCMinimum / $scope.bity.curRate['ETHBTC'];
-      let ETHMinimumWithBuffer = ETHMinimum + 0.3 * ETHMinimum;
-      let ETHMinimumRounded = roundNumber(ETHMinimumWithBuffer, 3);
+    if ((!$scope.showStage3ShapeShift && !$scope.showStage3Bity)) {
+      let BTCMinimum = bity.min;
+      let BTCMaximum = bity.max;
+      if ($scope.swapOrder.fromCoin === 'BTC') {
+        if ($scope.swapOrder.fromVal < BTCMinimum) {
+          $scope.originRateError = `Minimum BTC amount is ${BTCMinimum}`;
+          return false;
+        }
+        if ($scope.swapOrder.fromVal > BTCMaximum) {
+          $scope.originRateError = `Maximum BTC amount is ${BTCMaximum}`;
+          return false;
+        }
+        $scope.originRateError = null;
+        $scope.destinationRateError = null;
+        return true;
+      } else if ($scope.swapOrder.fromCoin === 'ETH') {
+        let ETHMinimum = BTCMinimum / $scope.bity.curRate['ETHBTC'];
+        let ETHMinimumWithBuffer = ETHMinimum + 0.3 * ETHMinimum;
+        let ETHMinimumRounded = roundNumber(ETHMinimumWithBuffer, 3);
 
-      let ETHMaximum = BTCMaximum / $scope.bity.curRate['ETHBTC'];
-      let ETHMaximumWithBuffer = ETHMaximum - 0.2 * ETHMinimum;
-      let ETHMaximumRounded = roundNumber(ETHMaximumWithBuffer, 3);
+        let ETHMaximum = BTCMaximum / $scope.bity.curRate['ETHBTC'];
+        let ETHMaximumWithBuffer = ETHMaximum - 0.2 * ETHMinimum;
+        let ETHMaximumRounded = roundNumber(ETHMaximumWithBuffer, 3);
 
-      if ($scope.swapOrder.fromVal < ETHMinimumRounded) {
-        $scope.originRateError = `Minimum ETH amount is ${ETHMinimumRounded}`;
-        return false;
+        if ($scope.swapOrder.fromVal < ETHMinimumRounded) {
+          $scope.originRateError = `Minimum ETH amount is ${ETHMinimumRounded}`;
+          return false;
+        }
+        if ($scope.swapOrder.fromVal > ETHMaximumRounded) {
+          $scope.originRateError = `Maximum ETH amount is ${ETHMaximumRounded}`;
+          return false;
+        }
+        $scope.originRateError = null;
+        $scope.destinationRateError = null;
+        return true;
       }
-      if ($scope.swapOrder.fromVal > ETHMaximumRounded) {
-        $scope.originRateError = `Maximum ETH amount is ${ETHMaximumRounded}`;
-        return false;
-      }
-      $scope.originRateError = null;
-      $scope.destinationRateError = null;
-      return true;
     }
   };
 
