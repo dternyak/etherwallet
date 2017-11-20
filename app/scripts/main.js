@@ -118,7 +118,7 @@ app.config(['$translateProvider', function($translateProvider) {
 app.config(['$animateProvider', function($animateProvider) {
     $animateProvider.classNameFilter(/^no-animate$/);
 }]);
-app.factory('globalService', ['$http', '$httpParamSerializerJQLike', globalService]);
+app.factory('globalService', ['$http', '$httpParamSerializerJQLike', '$rootScope', globalService]);
 app.factory('walletService', walletService);
 app.factory('shapeShiftService', ['$http', shapeShiftService]);
 app.directive('blockieAddress', blockiesDrtv);
