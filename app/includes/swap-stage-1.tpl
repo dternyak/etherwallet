@@ -63,7 +63,9 @@
         </div>
         <div ng-if="!isBitySwap">
             <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener">
-                <img src="images/ShapeShift.png" width="120" height="49"/></a>
+                <!--<img src="images/ShapeShift.png" width="120" height="49"/></a>-->
+                <img src="images/logo-shapeshift.svg" width="120" height="49"></a>
+
         </div>
     </section>
     <!-- / Colored Columns -->
