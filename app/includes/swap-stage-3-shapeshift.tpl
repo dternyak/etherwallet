@@ -36,34 +36,30 @@
     <!-- Swap Progress -->
     <section class="row swap-progress">
         <div class="sep"></div>
-        <div class="progress-item {{orderResult.progress.bar[0]}}">
+        <div class="progress-item {{getShapeShiftProgressClass(0)}}">
             <div class="progress-circle"><i>1</i></div>
             <p translate="SWAP_progress_1">Order Initiated</p>
         </div>
-        <div class="progress-item {{orderResult.progress.bar[1]}}">
+        <div class="progress-item {{getShapeShiftProgressClass(1)}}">
             <div class="progress-circle"><i>2</i></div>
             <p><span translate="SWAP_progress_2">Waiting for your </span> {{orderResult.inputCurrency}}...</p>
         </div>
-        <div class="progress-item {{orderResult.progress.bar[2]}}">
+        <div class="progress-item {{getShapeShiftProgressClass(2)}}">
             <div class="progress-circle"><i>3</i></div>
             <p>{{orderResult.inputCurrency}} <span translate="SWAP_progress_3">Received!</span></p>
         </div>
 
-        <div class="progress-item {{orderResult.progress.bar[3]}}">
+        <div class="progress-item {{getShapeShiftProgressClass(3)}}">
             <div class="progress-circle"><i>4</i></div>
             <p>
                 <span translate="SWAP_progress_4">Sending your </span> {{orderResult.outputCurrency}} <br/>
             </p>
-            <div ng-if="isBitySwap">
-                <small ng-show="orderResult.inputCurrency=='ETH'"> Waiting for 10 confirmations...</small>
-                <small ng-show="orderResult.inputCurrency=='BTC'"> Waiting for 1 confirmation...</small>
-            </div>
             <div ng-if="!isBitySwap">
-                <small> Waiting for confirmations...</small>
+                <small> Waiting for confirmation...</small>
             </div>
         </div>
 
-        <div class="progress-item {{orderResult.progress.bar[4]}}">
+        <div class="progress-item {{getShapeShiftProgressClass(4)}}">
             <div class="progress-circle"><i>5</i></div>
             <p translate="SWAP_progress_5">Order Complete</p>
         </div>
@@ -73,9 +69,13 @@
         <h1 style="color: red">Your order has expired!</h1>
     </article>
 
+    <article class="row text-center" ng-if="shapeShiftComplete.success">
+        <h1 style="color: green">Success! <a ng-click="navigateTo(shapeShiftComplete.txHref)">View Tx</a></h1>
+    </article>
+
 
     <!-- Swap CTA -->
-    <section class="row text-center" ng-if="!orderIsExpired">
+    <section class="row text-center" ng-if="!shapeShiftComplete.success">
         <h1>
             <span translate="SWAP_order_CTA">      Please send                                                 </span>
             <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
@@ -86,21 +86,11 @@
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-if="showStage3Eth && !orderIsExpired">
-        <section class="clearfix collapse-container">
-            <div class="text-center" ng-click="wd = !wd">
-                <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
-                <h5 traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</h5>
+    <article class="row" ng-if="showStage3Eth && !shapeShiftComplete.success">
+            <div class="col-md-6 col-md-offset-3">
+            <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to send ETH or Tokens</button>
             </div>
-            <div ng-show="!wd">
-                @@if (site === 'mew' ) {
-                <wallet-decrypt-drtv></wallet-decrypt-drtv>
-                }
-                @@if (site === 'cx' ) {
-                <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
-                }
-            </div>
-        </section>
+
 
         <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">
             <strong>Warning! You are not connected to an ETH node.</strong> <br/>

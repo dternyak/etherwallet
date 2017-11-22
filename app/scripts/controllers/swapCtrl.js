@@ -29,6 +29,31 @@ let swapCtrl = function($scope, shapeShiftService) {
     3: null
   };
   $scope.canShowSwap = false;
+  $scope.shapeShiftProgressStep = null;
+  $scope.shapeShiftComplete = {};
+
+  $scope.navigateTo = function(url) {
+    console.log(url);
+    var win = window.open(url, '_blank');
+    win.focus();
+  };
+
+  $scope.navigateToSend = function() {
+    let href = location.protocol + '//' + location.host + location.pathname;
+    let replaced = href + '#send-transaction';
+    $scope.navigateTo(replaced);
+    return false;
+  };
+
+  $scope.getShapeShiftProgressClass = function(index) {
+    if (index === $scope.shapeShiftProgressStep) {
+      return 'progress-active';
+    } else if (index < $scope.shapeShiftProgressStep) {
+      return 'progress-true';
+    } else {
+      return '';
+    }
+  };
 
   function pickRandomProperty(obj) {
     let result;
@@ -87,7 +112,7 @@ let swapCtrl = function($scope, shapeShiftService) {
           $scope.availableCoins
         );
       }
-      if (!$scope.loadedBityRates) {
+      if (!$scope.loadedBityRates && !$scope.showStage3ShapeShift) {
         $scope.setOrderCoin(true, 'ETH');
       }
       $scope.loadedBityRates = true;
@@ -154,6 +179,7 @@ let swapCtrl = function($scope, shapeShiftService) {
       swapRate: '',
       swapPair: ''
     };
+    $scope.shapeShiftComplete = {};
     $scope.getAvailableShapeShiftCoins();
   };
 
@@ -162,7 +188,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   }
 
   $scope.verifyMinMaxValuesBity = function() {
-    if ((!$scope.showStage3ShapeShift && !$scope.showStage3Bity)) {
+    if (!$scope.showStage3ShapeShift && !$scope.showStage3Bity) {
       let BTCMinimum = bity.min;
       let BTCMaximum = bity.max;
       if ($scope.swapOrder.fromCoin === 'BTC') {
@@ -553,7 +579,11 @@ let swapCtrl = function($scope, shapeShiftService) {
 
   let formattedTimeFromSeconds = function(secondsRemaining) {
     if (secondsRemaining <= 0) {
-      $scope.notifier.danger(timeOutMessage, 0);
+      shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
+        if (!$scope.shapeShiftComplete.success) {
+          $scope.notifier.danger(timeOutMessage, 0);
+        }
+      });
       return '00:00';
     }
     if (secondsRemaining || secondsRemaining === 0) {
@@ -567,22 +597,81 @@ let swapCtrl = function($scope, shapeShiftService) {
     }
   };
 
-  let processOrderShapeShift = function() {
-    let timeRem = setInterval(function() {
+  let shapeShiftIntervalDecrease = function() {
+    $scope.shapeShiftIntervalDecreaseTimeRem = setInterval(function() {
       if ($scope.showStage3ShapeShift) {
         let expirationFormatted = formattedTimeRemainingFromEpoch($scope.orderResult.expiration);
         if (expirationFormatted === '00:00') {
-          $scope.orderIsExpired = true;
-          clearInterval(timeRem);
+          shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
+            if (!$scope.shapeShiftComplete.success) {
+              $scope.orderIsExpired = true;
+            }
+            clearInterval(timeRem);
+          });
         }
         $scope.orderResult.expirationFormatted = expirationFormatted;
         if (!$scope.$$phase) {
           $scope.$apply();
         }
       } else {
-        clearInterval(timeRem);
+        clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
       }
     }, 1000);
+  };
+
+  function sleep(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+  }
+
+  function handleShapeShiftStatusCheck(resp) {
+    if (resp.status === 'no_deposits') {
+      $scope.shapeShiftProgressStep = 1;
+    } else if (resp.status === 'received') {
+      $scope.shapeShiftProgressStep = 2;
+    } else if (resp.status === 'complete') {
+      $scope.shapeShiftProgressStep = 5;
+    }
+  }
+
+  let shapeShiftOrderStatusChecking = function(shapeShiftAddress) {
+    if ($scope.showStage3ShapeShift) {
+      return shapeShiftService
+        .checkStatus(shapeShiftAddress)
+        .then(function(data) {
+          handleShapeShiftStatusCheck(data);
+          console.log(data);
+          if (!$scope.$$phase) {
+            $scope.$apply();
+          }
+          if (data.status !== 'complete') {
+            sleep(10000).then(function() {
+              shapeShiftOrderStatusChecking(shapeShiftAddress);
+            });
+          } else {
+            let txHref = data.outputCurrency === 'BTC'
+              ? bity.btcExplorer.replace('[[txHash]]', data.transaction)
+              : bity.ethExplorer.replace('[[txHash]]', data.transaction);
+
+            clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
+
+            $scope.orderResult.expirationFormatted = '-';
+
+            $scope.shapeShiftComplete = {
+              success: true,
+              txHref: txHref,
+              transaction: data.transaction
+            };
+          }
+        })
+        .catch(function(err) {
+          // TODO - implement error handling here;
+        });
+    }
+  };
+
+  let processOrderShapeShift = function() {
+    shapeShiftIntervalDecrease();
+    shapeShiftOrderStatusChecking($scope.orderResult.deposit);
   };
 
   let openOrderShapeShift = function() {
@@ -612,6 +701,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         processOrder();
       })
       .catch(function(err) {
+        console.log(err);
         $scope.orderOpenLoading = false;
       });
   };
