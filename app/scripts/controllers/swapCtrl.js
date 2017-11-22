@@ -391,6 +391,7 @@ let swapCtrl = function($scope, shapeShiftService) {
       $scope.swapOrder = order.swapOrder;
       processOrderBity();
     } else {
+      $scope.isBitySwap = swapProvider(order.inputCurrency, order.outputCurrency) === 'BITY';
       $scope.swapOrder = order;
       $scope.orderResult = order;
       $scope.showStage2 = false;
