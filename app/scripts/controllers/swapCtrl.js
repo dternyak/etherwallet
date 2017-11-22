@@ -21,7 +21,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
   $scope.allAvailableDestinationCoins = [];
   $scope.availableCoins = ['ETH', 'BTC'];
-  $scope.shapeShiftWhitelistCoins = ['ETC', 'ZRX', 'SNT', 'ANT', 'BAT', 'GNT', 'BNT', 'REP'];
+  $scope.shapeShiftWhitelistCoins = ['ETC', 'ZRX', 'SNT', 'ANT', 'BAT', 'GNT', 'BNT', 'REP', 'ETH', 'BTC'];
   $scope.randomRatesTokens = {
     0: null,
     1: null,
@@ -33,7 +33,6 @@ let swapCtrl = function($scope, shapeShiftService) {
   $scope.shapeShiftComplete = {};
 
   $scope.navigateTo = function(url) {
-    console.log(url);
     var win = window.open(url, '_blank');
     win.focus();
   };
@@ -66,9 +65,11 @@ let swapCtrl = function($scope, shapeShiftService) {
     if (!$scope.randomRatesTokens[index]) {
       while (true) {
         let tokenSymbol = pickRandomProperty($scope.shapeShiftCoinData);
-        if (!(Object.values($scope.randomRatesTokens).indexOf(tokenSymbol) > -1)) {
-          $scope.randomRatesTokens[index] = tokenSymbol;
-          return tokenSymbol;
+        if (tokenSymbol !== 'ETH') {
+          if (!(Object.values($scope.randomRatesTokens).indexOf(tokenSymbol) > -1)) {
+            $scope.randomRatesTokens[index] = tokenSymbol;
+            return tokenSymbol;
+          }
         }
       }
     } else {
@@ -112,7 +113,7 @@ let swapCtrl = function($scope, shapeShiftService) {
           $scope.availableCoins
         );
       }
-      if (!$scope.loadedBityRates && !$scope.showStage3ShapeShift) {
+      if (!$scope.loadedBityRates && $scope.showStage1) {
         $scope.setOrderCoin(true, 'ETH');
       }
       $scope.loadedBityRates = true;
@@ -132,9 +133,8 @@ let swapCtrl = function($scope, shapeShiftService) {
         $scope.shapeShiftCoinData = shapeShiftCoinData;
         $scope.loadedShapeShiftRates = true;
         // not shapeShiftWhitelistCoins in case coin is not returned by `getcoins`
-        $scope.allAvailableDestinationCoins = $scope.allAvailableDestinationCoins.concat(
-          Object.keys(shapeShiftCoinData)
-        );
+        $scope.allAvailableDestinationCoins = Object.keys(shapeShiftCoinData);
+        $scope.availableCoins = Object.keys(shapeShiftCoinData)
         checkCanShowRates();
       })
       .catch(function(err) {
@@ -278,30 +278,32 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
 
   $scope.setOrderCoin = function(isFrom, coin) {
-    if ($scope.swapOrder) {
-      if (isFrom) {
-        $scope.swapOrder.fromCoin = coin;
-      } else {
-        $scope.swapOrder.toCoin = coin;
+    if ($scope.showStage1) {
+      if ($scope.swapOrder) {
+        if (isFrom) {
+          $scope.swapOrder.fromCoin = coin;
+        } else {
+          $scope.swapOrder.toCoin = coin;
+        }
+        if ($scope.swapOrder.fromCoin === $scope.swapOrder.toCoin) {
+          $scope.handleMatchingToAndFromCoins();
+        }
+        checkIfBitySwap();
+        $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + '/' + $scope.swapOrder.toCoin;
+        if ($scope.isBitySwap) {
+          $scope.swapOrder.swapRate =
+            $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
+        } else {
+          $scope.swapOrder.swapRate =
+            $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][
+              $scope.swapOrder.fromCoin
+              ].rate;
+        }
+        $scope.updateEstimate(isFrom);
+        $scope.verifyMinMaxValues();
+        $scope.dropdownFrom = false;
+        $scope.dropdownTo = false;
       }
-      if ($scope.swapOrder.fromCoin === $scope.swapOrder.toCoin) {
-        $scope.handleMatchingToAndFromCoins();
-      }
-      checkIfBitySwap();
-      $scope.swapOrder.swapPair = $scope.swapOrder.fromCoin + '/' + $scope.swapOrder.toCoin;
-      if ($scope.isBitySwap) {
-        $scope.swapOrder.swapRate =
-          $scope.bity.curRate[$scope.swapOrder.fromCoin + $scope.swapOrder.toCoin];
-      } else {
-        $scope.swapOrder.swapRate =
-          $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][
-            $scope.swapOrder.fromCoin
-          ].rate;
-      }
-      $scope.updateEstimate(isFrom);
-      $scope.verifyMinMaxValues();
-      $scope.dropdownFrom = false;
-      $scope.dropdownTo = false;
     }
   };
 
@@ -555,8 +557,10 @@ let swapCtrl = function($scope, shapeShiftService) {
         $scope.orderResult = data.data;
         $scope.orderResult.swapOrder = $scope.swapOrder;
         $scope.orderResult.provider = 'BITY';
-        let orderResult = $scope.orderResult;
-        saveOrderToStorage(orderResult);
+        saveOrderToStorage($scope.orderResult);
+        if (!$scope.$$phase) {
+          $scope.$apply();
+        }
         processOrder();
         $scope.orderOpenLoading = false;
       } else {
@@ -605,8 +609,9 @@ let swapCtrl = function($scope, shapeShiftService) {
           shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
             if (!$scope.shapeShiftComplete.success) {
               $scope.orderIsExpired = true;
+              $scope.shapeShiftProgressStep = null;
             }
-            clearInterval(timeRem);
+            clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
           });
         }
         $scope.orderResult.expirationFormatted = expirationFormatted;
@@ -644,18 +649,18 @@ let swapCtrl = function($scope, shapeShiftService) {
             $scope.$apply();
           }
           if (data.status !== 'complete') {
-            sleep(10000).then(function() {
-              shapeShiftOrderStatusChecking(shapeShiftAddress);
-            });
+            if (!$scope.orderIsExpired) {
+              sleep(10000).then(function() {
+                shapeShiftOrderStatusChecking(shapeShiftAddress);
+              });
+            }
           } else {
             let txHref = data.outputCurrency === 'BTC'
               ? bity.btcExplorer.replace('[[txHash]]', data.transaction)
               : bity.ethExplorer.replace('[[txHash]]', data.transaction);
 
             clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
-
             $scope.orderResult.expirationFormatted = '-';
-
             $scope.shapeShiftComplete = {
               success: true,
               txHref: txHref,
@@ -686,7 +691,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         $scope.orderOpenLoading = false;
         $scope.showStage2 = false;
         $scope.showStage3ShapeShift = true;
-        if ($scope.swapOrder.toCoin === 'BTC') {
+        if ($scope.swapOrder.fromCoin === 'BTC') {
           $scope.showStage3Eth = false;
           $scope.showStage3Btc = true;
         } else {

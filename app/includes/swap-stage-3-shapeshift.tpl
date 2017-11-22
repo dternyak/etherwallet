@@ -75,7 +75,7 @@
 
 
     <!-- Swap CTA -->
-    <section class="row text-center" ng-if="!shapeShiftComplete.success">
+    <section class="row text-center" ng-if="!shapeShiftComplete.success && !orderIsExpired">
         <h1>
             <span translate="SWAP_order_CTA">      Please send                                                 </span>
             <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
@@ -86,10 +86,12 @@
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-if="showStage3Eth && !shapeShiftComplete.success">
-            <div class="col-md-6 col-md-offset-3">
-            <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to send ETH or Tokens</button>
-            </div>
+    <article class="row" ng-if="showStage3Eth && !shapeShiftComplete.success && !orderIsExpired">
+        <div class="col-md-6 col-md-offset-3">
+            <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to send
+                ETH or Tokens
+            </button>
+        </div>
 
 
         <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">

@@ -116,9 +116,11 @@ var shapeShiftService = function($http) {
           availableCoins,
           whiteListSymbolArray
         );
-        return that.attachRatesToCoins(whiteListedAvailableCoins).then(function(coinDataWithRates) {
-          return coinDataWithRates;
-        });
+        return that
+          .attachRatesToCoins(whiteListedAvailableCoins, Object.keys(whiteListedAvailableCoins))
+          .then(function(coinDataWithRates) {
+            return coinDataWithRates;
+          });
       });
     },
 
@@ -142,7 +144,16 @@ var shapeShiftService = function($http) {
       coinsObj[coinSymbol]['RATES'][originKind] = pairRate;
     },
 
+    clean: function(obj) {
+      for (var propName in obj) {
+        if (obj[propName] === null || obj[propName] === undefined) {
+          delete obj[propName];
+        }
+      }
+    },
+
     attachRatesToCoins: function(coinsObj, originKindArray) {
+      let defaultOrigin = ['BTC', 'ETH'];
       if (!originKindArray) {
         originKindArray = ['BTC', 'ETH'];
       }
@@ -150,7 +161,16 @@ var shapeShiftService = function($http) {
       return this.getMarketInfo().then(function(marketInfo) {
         Object.keys(coinsObj).forEach(function(coinSymbol) {
           originKindArray.forEach(function(originKind) {
-            that.attachRateToCoin(coinsObj, coinSymbol, originKind, marketInfo);
+            if (originKind !== coinSymbol) {
+              that.attachRateToCoin(coinsObj, coinSymbol, originKind, marketInfo);
+              that.clean(coinsObj[coinSymbol]['RATES'][originKind]);
+            }
+          });
+          defaultOrigin.forEach(function(defaultOriginKind) {
+            if (defaultOriginKind !== coinSymbol) {
+              that.attachRateToCoin(coinsObj, coinSymbol, defaultOriginKind, marketInfo);
+            }
+            that.clean(coinsObj[coinSymbol]['RATES'][defaultOriginKind]);
           });
         });
         return coinsObj;
