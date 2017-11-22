@@ -391,8 +391,6 @@ let swapCtrl = function($scope, shapeShiftService) {
       $scope.swapOrder = order.swapOrder;
       processOrderBity();
     } else {
-      console.log('is shapeshift');
-      console.log(order);
       $scope.swapOrder = order;
       $scope.orderResult = order;
       $scope.showStage2 = false;
@@ -644,7 +642,6 @@ let swapCtrl = function($scope, shapeShiftService) {
         .checkStatus(shapeShiftAddress)
         .then(function(data) {
           handleShapeShiftStatusCheck(data);
-          console.log(data);
           if (!$scope.$$phase) {
             $scope.$apply();
           }
@@ -706,7 +703,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         processOrder();
       })
       .catch(function(err) {
-        console.log(err);
+        // TODO - show error notification here
         $scope.orderOpenLoading = false;
       });
   };
