@@ -69,13 +69,13 @@
         <h1 style="color: red">Your order has expired!</h1>
     </article>
 
-    <article class="row text-center" ng-if="shapeShiftComplete.success">
-        <h1 style="color: green">Success! <a ng-click="navigateTo(shapeShiftComplete.txHref)">View Tx</a></h1>
+    <article class="row text-center" ng-if="shapeShiftStatus.status === 'complete'">
+        <h1 style="color: green">Success! <a ng-click="navigateTo(getExplorerInfo().txHref)">View Tx</a></h1>
     </article>
 
 
     <!-- Swap CTA -->
-    <section class="row text-center" ng-if="!shapeShiftComplete.success && !orderIsExpired">
+    <section class="row text-center" ng-if="shapeShiftStatus.status !== 'complete' && !orderIsExpired">
         <h1>
             <span translate="SWAP_order_CTA">      Please send                                                 </span>
             <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
@@ -86,7 +86,7 @@
 
 
     <!-- Swap CTA ETH -->
-    <article class="row" ng-if="showStage3Eth && !shapeShiftComplete.success && !orderIsExpired">
+    <article class="row" ng-if="showStage3Eth && shapeShiftStatus.status !== 'complete' && !orderIsExpired">
         <div class="col-md-6 col-md-offset-3">
             <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to send
                 ETH or Tokens

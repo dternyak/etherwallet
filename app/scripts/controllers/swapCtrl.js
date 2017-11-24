@@ -21,7 +21,18 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
   $scope.allAvailableDestinationCoins = [];
   $scope.availableCoins = ['ETH', 'BTC'];
-  $scope.shapeShiftWhitelistCoins = ['ETC', 'ZRX', 'SNT', 'ANT', 'BAT', 'GNT', 'BNT', 'REP', 'ETH', 'BTC'];
+  $scope.shapeShiftWhitelistCoins = [
+    'ETC',
+    'ZRX',
+    'SNT',
+    'ANT',
+    'BAT',
+    'GNT',
+    'BNT',
+    'REP',
+    'ETH',
+    'BTC'
+  ];
   $scope.randomRatesTokens = {
     0: null,
     1: null,
@@ -30,10 +41,12 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
   $scope.canShowSwap = false;
   $scope.shapeShiftProgressStep = null;
-  $scope.shapeShiftComplete = {};
+  $scope.shapeShiftStatus = {
+    status: null
+  };
 
   $scope.navigateTo = function(url) {
-    var win = window.open(url, '_blank');
+    let win = window.open(url, '_blank');
     win.focus();
   };
 
@@ -134,7 +147,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         $scope.loadedShapeShiftRates = true;
         // not shapeShiftWhitelistCoins in case coin is not returned by `getcoins`
         $scope.allAvailableDestinationCoins = Object.keys(shapeShiftCoinData);
-        $scope.availableCoins = Object.keys(shapeShiftCoinData)
+        $scope.availableCoins = Object.keys(shapeShiftCoinData);
         checkCanShowRates();
       })
       .catch(function(err) {
@@ -179,7 +192,10 @@ let swapCtrl = function($scope, shapeShiftService) {
       swapRate: '',
       swapPair: ''
     };
-    $scope.shapeShiftComplete = {};
+    $scope.shapeShiftStatus = {
+      status: null
+    };
+    $scope.orderIsExpired = false;
     $scope.getAvailableShapeShiftCoins();
   };
 
@@ -297,7 +313,7 @@ let swapCtrl = function($scope, shapeShiftService) {
           $scope.swapOrder.swapRate =
             $scope.shapeShiftCoinData[$scope.swapOrder.toCoin]['RATES'][
               $scope.swapOrder.fromCoin
-              ].rate;
+            ].rate;
         }
         $scope.updateEstimate(isFrom);
         $scope.verifyMinMaxValues();
@@ -583,7 +599,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   let formattedTimeFromSeconds = function(secondsRemaining) {
     if (secondsRemaining <= 0) {
       shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
-        if (!$scope.shapeShiftComplete.success) {
+        if ($scope.shapeShiftStatus.status !== 'status') {
           $scope.notifier.danger(timeOutMessage, 0);
         }
       });
@@ -606,7 +622,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         let expirationFormatted = formattedTimeRemainingFromEpoch($scope.orderResult.expiration);
         if (expirationFormatted === '00:00') {
           shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
-            if (!$scope.shapeShiftComplete.success) {
+            if ($scope.shapeShiftStatus.status !== 'complete') {
               $scope.orderIsExpired = true;
               $scope.shapeShiftProgressStep = null;
             }
@@ -653,22 +669,27 @@ let swapCtrl = function($scope, shapeShiftService) {
               });
             }
           } else {
-            let txHref = data.outputCurrency === 'BTC'
-              ? bity.btcExplorer.replace('[[txHash]]', data.transaction)
-              : bity.ethExplorer.replace('[[txHash]]', data.transaction);
-
+            $scope.shapeShiftStatus = data;
             clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
             $scope.orderResult.expirationFormatted = '-';
-            $scope.shapeShiftComplete = {
-              success: true,
-              txHref: txHref,
-              transaction: data.transaction
-            };
           }
         })
         .catch(function(err) {
           // TODO - implement error handling here;
         });
+    }
+  };
+
+  $scope.getExplorerInfo = function() {
+    if ($scope.shapeShiftStatus.status === 'complete') {
+      let txHref = $scope.shapeShiftStatus.outputCurrency === 'BTC'
+        ? bity.btcExplorer.replace('[[txHash]]', $scope.shapeShiftStatus.transaction)
+        : bity.ethExplorer.replace('[[txHash]]', $scope.shapeShiftStatus.transaction);
+
+      return {
+        txHref: txHref,
+        transaction: $scope.shapeShiftStatus.transaction
+      };
     }
   };
 
