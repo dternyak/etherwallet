@@ -65,68 +65,80 @@
         </div>
     </section>
 
-    <article class="row text-center" ng-if="orderIsExpired">
-        <h1 style="color: red">Your order has expired!</h1>
-    </article>
+    <div ng-show="!failedShift">
 
-    <article class="row text-center" ng-if="shapeShiftStatus.status === 'complete'">
-        <h1 style="color: green">Success! <a ng-click="navigateTo(getExplorerInfo().txHref)">View Tx</a></h1>
-    </article>
+        <article class="row text-center" ng-if="orderIsExpired">
+            <h1 style="color: red">Your order has expired!</h1>
+        </article>
 
-
-    <!-- Swap CTA -->
-    <section class="row text-center" ng-if="shapeShiftStatus.status !== 'complete' && !orderIsExpired">
-        <h1>
-            <span translate="SWAP_order_CTA">      Please send                                                 </span>
-            <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
-            <span translate="SENDModal_Content_2"> to address                                                  </span><br/>
-            <strong class="mono text-primary"> {{orderResult.deposit}} </strong>
-        </h1>
-    </section>
+        <article class="row text-center" ng-if="shapeShiftStatus.status === 'complete'">
+            <h1 style="color: green">Success! <a ng-click="navigateTo(getExplorerInfo().txHref)">View Tx</a></h1>
+        </article>
 
 
-    <!-- Swap CTA ETH -->
-    <article class="row" ng-if="showStage3Eth && shapeShiftStatus.status !== 'complete' && !orderIsExpired">
-        <div class="col-md-6 col-md-offset-3">
-            <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to send
-                ETH or Tokens
-            </button>
-        </div>
-
-
-        <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">
-            <strong>Warning! You are not connected to an ETH node.</strong> <br/>
-            Please use the node switcher in the top-right corner to switch to an ETH node. We <strong>do not</strong>
-            support swapping ETC or Testnet ETH.
-        </div>
-
-        <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
-            @@if (site === 'mew' ) { @@include( './sendTx-content.tpl', { "site": "mew" } ) }
-            @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
-
-            @@if (site === 'mew' ) { @@include( './sendTx-modal.tpl', { "site": "mew" } ) }
-            @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
+        <!-- Swap CTA -->
+        <section class="row text-center" ng-if="shapeShiftStatus.status !== 'complete' && !orderIsExpired">
+            <h1>
+                <span translate="SWAP_order_CTA">      Please send                                                 </span>
+                <strong> {{orderResult.depositAmount}} {{orderResult.inputCurrency}} </strong>
+                <span translate="SENDModal_Content_2"> to address                                                  </span><br/>
+                <strong class="mono text-primary"> {{orderResult.deposit}} </strong>
+            </h1>
         </section>
-    </article>
-
-    <!-- / Swap CTA ETH -->
 
 
-    <!-- Swap CTA BTC -->
-    <section class="row block swap-address text-center" ng-show="showStage3Btc">
-        <label translate="x_Address"> Your Address </label>
-        <div class="qr-code" qr-code="{{'bitcoin:'+orderResult.deposit+'?amount='+orderResult.depositAmount}}"
-             watch-var="orderResult"></div>
-        <br/>
-        <p class="text-danger">
-            Orders that take too long will have to be processed manually &amp; and may delay the amount of time it takes
-            to receive your coins.
+        <!-- Swap CTA ETH -->
+        <article class="row" ng-if="showStage3Eth && shapeShiftStatus.status !== 'complete' && !orderIsExpired">
+            <div class="col-md-6 col-md-offset-3">
+                <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to
+                    send
+                    ETH or Tokens
+                </button>
+            </div>
+
+
+            <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">
+                <strong>Warning! You are not connected to an ETH node.</strong> <br/>
+                Please use the node switcher in the top-right corner to switch to an ETH node. We <strong>do
+                not</strong>
+                support swapping ETC or Testnet ETH.
+            </div>
+
+            <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
+                @@if (site === 'mew' ) { @@include( './sendTx-content.tpl', { "site": "mew" } ) }
+                @@if (site === 'cx' ) { @@include( './sendTx-content.tpl', { "site": "cx" } ) }
+
+                @@if (site === 'mew' ) { @@include( './sendTx-modal.tpl', { "site": "mew" } ) }
+                @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
+            </section>
+        </article>
+
+        <!-- / Swap CTA ETH -->
+
+
+        <!-- Swap CTA BTC -->
+        <section class="row block swap-address text-center" ng-show="showStage3Btc">
+            <label translate="x_Address"> Your Address </label>
+            <div class="qr-code" qr-code="{{'bitcoin:'+orderResult.deposit+'?amount='+orderResult.depositAmount}}"
+                 watch-var="orderResult"></div>
             <br/>
-            <a href="https://shapeshift.io/#/btcfee" target="_blank" rel="noopener noreferrer">Please use the
-                recommended TX fees seen here.</a>
-        </p>
+            <p class="text-danger">
+                Orders that take too long will have to be processed manually &amp; and may delay the amount of time it
+                takes
+                to receive your coins.
+                <br/>
+                <a href="https://shapeshift.io/#/btcfee" target="_blank" rel="noopener noreferrer">Please use the
+                    recommended TX fees seen here.</a>
+            </p>
 
-    </section>
+        </section>
+
+    </div>
+
+
+    <article class="row text-center" ng-if="failedShift">
+        <h1 style="color: red">Your shift encountered an error! Please contact support using the orange button below</h1>
+    </article>
 
 
 </article>

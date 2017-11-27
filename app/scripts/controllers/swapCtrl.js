@@ -44,6 +44,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   $scope.shapeShiftStatus = {
     status: null
   };
+  $scope.failedShift = false;
 
   $scope.navigateTo = function(url) {
     let win = window.open(url, '_blank');
@@ -196,6 +197,7 @@ let swapCtrl = function($scope, shapeShiftService) {
       status: null
     };
     $scope.orderIsExpired = false;
+    $scope.failedShift = false;
     $scope.getAvailableShapeShiftCoins();
   };
 
@@ -599,7 +601,7 @@ let swapCtrl = function($scope, shapeShiftService) {
   let formattedTimeFromSeconds = function(secondsRemaining) {
     if (secondsRemaining <= 0) {
       shapeShiftOrderStatusChecking($scope.orderResult.deposit).then(function() {
-        if ($scope.shapeShiftStatus.status !== 'status') {
+        if ($scope.shapeShiftStatus.status !== 'complete') {
           $scope.notifier.danger(timeOutMessage, 0);
         }
       });
@@ -650,6 +652,8 @@ let swapCtrl = function($scope, shapeShiftService) {
       $scope.shapeShiftProgressStep = 2;
     } else if (resp.status === 'complete') {
       $scope.shapeShiftProgressStep = 5;
+    } else if (resp.status === 'failed') {
+      $scope.failedShift = true;
     }
   }
 
@@ -663,10 +667,14 @@ let swapCtrl = function($scope, shapeShiftService) {
             $scope.$apply();
           }
           if (data.status !== 'complete') {
-            if (!$scope.orderIsExpired) {
-              sleep(10000).then(function() {
-                shapeShiftOrderStatusChecking(shapeShiftAddress);
-              });
+            if (data.status !== 'failed') {
+              if (!$scope.orderIsExpired) {
+                sleep(10000).then(function() {
+                  shapeShiftOrderStatusChecking(shapeShiftAddress);
+                });
+              } else {
+                clearInterval($scope.shapeShiftIntervalDecreaseTimeRem);
+              }
             }
           } else {
             $scope.shapeShiftStatus = data;
