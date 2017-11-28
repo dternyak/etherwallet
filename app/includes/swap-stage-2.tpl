@@ -12,7 +12,7 @@
         </div>
         <div class="col-xs-3" ng-if="!isBitySwap">
             <a class="link bity-logo" href="https://shapeshift.io" target="_blank" rel="noopener">
-                <img class="pull-right" src="images/ShapeShiftDark.png" width="100" height="38"/>
+                <img class="pull-right" src="images/shapeshift-dark.svg" width="100" height="38"/>
             </a>
         </div>
     </section>
