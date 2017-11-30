@@ -3,7 +3,7 @@
 
     <div class="new-feature-banner"}>
         <p><b style="padding-right: 8px;">New Feature: </b>Exnchange coins & tokens</p>
-        <img src="images/logo-shapeshift.svg" class="swap__logo">
+        <img src="images/logo-shapeshift.svg" class="">
     </div>
 
     <!-- Title -->
