@@ -20,7 +20,7 @@ let swapCtrl = function($scope, shapeShiftService) {
     REPETH: 1
   };
   $scope.allAvailableDestinationCoins = [];
-  $scope.availableCoins = ['ETH', 'BTC'];
+  $scope.bityCoins = ['ETH', 'BTC'];
   $scope.shapeShiftWhitelistCoins = [
     'ETC',
     'ZRX',
@@ -124,7 +124,7 @@ let swapCtrl = function($scope, shapeShiftService) {
     $scope.bity.refreshRates(function() {
       if (!$scope.loadedBityRates) {
         $scope.allAvailableDestinationCoins = $scope.allAvailableDestinationCoins.concat(
-          $scope.availableCoins
+          $scope.bityCoins
         );
       }
       if (!$scope.loadedBityRates && $scope.showStage1) {
@@ -148,7 +148,7 @@ let swapCtrl = function($scope, shapeShiftService) {
         $scope.loadedShapeShiftRates = true;
         // not shapeShiftWhitelistCoins in case coin is not returned by `getcoins`
         $scope.allAvailableDestinationCoins = Object.keys(shapeShiftCoinData);
-        $scope.availableCoins = Object.keys(shapeShiftCoinData);
+        $scope.bityCoins = Object.keys(shapeShiftCoinData);
         checkCanShowRates();
       })
       .catch(function(err) {
@@ -288,9 +288,9 @@ let swapCtrl = function($scope, shapeShiftService) {
   };
 
   $scope.handleMatchingToAndFromCoins = function() {
-    for (let i in $scope.availableCoins)
-      if ($scope.availableCoins[i] !== $scope.swapOrder.fromCoin) {
-        $scope.swapOrder.toCoin = $scope.availableCoins[i];
+    for (let i in $scope.bityCoins)
+      if ($scope.bityCoins[i] !== $scope.swapOrder.fromCoin) {
+        $scope.swapOrder.toCoin = $scope.bityCoins[i];
         break;
       }
   };
