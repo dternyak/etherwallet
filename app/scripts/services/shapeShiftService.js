@@ -1,9 +1,10 @@
 'use strict';
 
-let softMinCapETH = 0.0001;
-let softMinCapBTC = 0.00001;
-
-let shapeShiftAPI = 'https://shapeshift.io';
+let SOFT_MIN_CAP_ETH = 0.0001;
+let SOFT_MIN_CAP_BTC = 0.00001;
+let API_KEY =
+  '0ca1ccd50b708a3f8c02327f0caeeece06d3ddc1b0ac749a987b453ee0f4a29bdb5da2e53bc35e57fb4bb7ae1f43c93bb098c3c4716375fc1001c55d8c94c160';
+let SHAPE_SHIFT_BASE_URL = 'https://shapeshift.io';
 
 var shapeShiftService = function($http) {
   return {
@@ -37,7 +38,7 @@ var shapeShiftService = function($http) {
     //   error: [Text describing failure]
     // }
     checkStatus: function(address) {
-      return $http.get(`${shapeShiftAPI}/txStat/${address}`).then(function(resp) {
+      return $http.get(`${SHAPE_SHIFT_BASE_URL}/txStat/${address}`).then(function(resp) {
         return resp.data;
       });
     },
@@ -53,17 +54,17 @@ var shapeShiftService = function($http) {
     sendAmount: function(withdrawal, originKind, destinationKind, destinationAmount) {
       let pair = originKind.toLowerCase() + '_' + destinationKind.toLowerCase();
       return $http({
-        url: `${shapeShiftAPI}/sendamount`,
+        url: `${SHAPE_SHIFT_BASE_URL}/sendamount`,
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        data: { withdrawal: withdrawal, pair: pair, amount: destinationAmount }
+        data: { withdrawal: withdrawal, pair: pair, amount: destinationAmount, apiKey: API_KEY }
       }).then(function(resp) {
         return resp.data.success;
       });
     },
 
     getMarketInfo: function() {
-      return $http.get(`${shapeShiftAPI}/marketinfo`).then(function(resp) {
+      return $http.get(`${SHAPE_SHIFT_BASE_URL}/marketinfo`).then(function(resp) {
         return resp.data;
       });
     },
@@ -76,13 +77,13 @@ var shapeShiftService = function($http) {
       if (filteredArray) {
         let pairData = filteredArray[0];
         if (originKind === 'ETH') {
-          if (pairData.min < softMinCapETH) {
-            pairData.min = softMinCapETH;
+          if (pairData.min < SOFT_MIN_CAP_ETH) {
+            pairData.min = SOFT_MIN_CAP_ETH;
           }
         }
         if (originKind === 'BTC') {
-          if (pairData.min < softMinCapBTC) {
-            pairData.min = softMinCapBTC;
+          if (pairData.min < SOFT_MIN_CAP_BTC) {
+            pairData.min = SOFT_MIN_CAP_BTC;
           }
         }
         return pairData;
@@ -93,7 +94,7 @@ var shapeShiftService = function($http) {
     },
 
     getTimeRemaining: function(address) {
-      return $http.get(`${shapeShiftAPI}/timeremaining/${address}`).then(function(resp) {
+      return $http.get(`${SHAPE_SHIFT_BASE_URL}/timeremaining/${address}`).then(function(resp) {
         return resp.data;
       });
     },
@@ -110,7 +111,7 @@ var shapeShiftService = function($http) {
 
     getAvailableCoins: function(whiteListSymbolArray) {
       let that = this;
-      return $http.get(`${shapeShiftAPI}/getcoins`).then(function(resp) {
+      return $http.get(`${SHAPE_SHIFT_BASE_URL}/getcoins`).then(function(resp) {
         let availableCoins = that.onlyAvailableCoins(resp.data);
         let whiteListedAvailableCoins = that.getWhiteListedCoins(
           availableCoins,
