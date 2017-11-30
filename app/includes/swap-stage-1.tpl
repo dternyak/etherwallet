@@ -99,7 +99,7 @@
                 <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownFrom')">{{swapOrder.fromCoin}}<i
                         class="caret"></i></a>
                 <ul class="dropdown-menu dropdown-menu-right" ng-if="dropdownFrom">
-                    <li ng-repeat="coin in bityCoins track by $index">
+                    <li ng-repeat="coin in originKindCoins | orderBy:'toString()' track by $index">
                         <a ng-class="{true:'active'}[coin == swapOrder.fromCoin]" ng-click="setOrderCoin(true, coin)">
                             {{getNameFromSymbol(coin)}} ({{coin}}) </a>
                     </li>
@@ -129,7 +129,7 @@
                 <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownTo')">{{swapOrder.toCoin}}<i
                         class="caret"></i></a>
                 <ul class="dropdown-menu dropdown-menu-right" ng-show="dropdownTo">
-                    <li ng-repeat="coin in allAvailableDestinationCoins track by $index"
+                    <li ng-repeat="coin in allAvailableDestinationCoins | orderBy:'toString()' track by $index"
                         ng-show="coin != swapOrder.fromCoin">
                         <a ng-class="{true:'active'}[coin == swapOrder.toCoin]" ng-click="setOrderCoin(false, coin)">
                           {{getNameFromSymbol(coin)}} ({{coin}}) </a>
