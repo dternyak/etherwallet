@@ -7,6 +7,12 @@
 // http://www.tokensalecalendar.com/
 
 module.exports = [{
+// NOX Token Sale
+to:         '0x4b0712de9b75bc68a566215acca876ea5e55c172',
+gasLimit:   114293,
+data:       '',
+msg:        'NOX Token Sale'
+},{
 // GEE Token Sale
 to:         '0xF5DFFdEAEA54bB56156B47de1C7b4346c7dBa69C',
 gasLimit:   180000,
@@ -204,4 +210,10 @@ to:         '0xd5E3036d5CE7eC222379D16f6ffC38C38c55BF7f',
 gasLimit:   200000,
 data:       '',
 msg:        'Ethereum High HIG is a robust and feather-light cryptocurrency designed to hedge the risk of your portfolio'
+},{
+// PIXEL Token Sale (PIXEL)
+to:         '0x7e7DC49715816d1f5712A1d7dFf083e4F9E588B6',
+gasLimit:   200000,
+data:       '',
+msg:        'PIXEL token sale contract. VR club franchise with neurointerfaces: https://vr-pixel.com. Ends 05.12.2017. Thank you for participating!'
 }]

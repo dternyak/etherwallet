@@ -1,6 +1,6 @@
 [{
 "address":"0x59416A25628A76b4730eC51486114c32E0B582A1",
-"symbol":"☼PLASMA",
+"symbol":"☀️ PLASMA",
 "decimal":6,
 "type":"default"
 },{
@@ -209,6 +209,11 @@
 "decimal":8,
 "type":"default"
 },{
+"address":"0x2accaB9cb7a48c3E82286F0b2f8798D201F4eC3f",
+"symbol":"BTL",
+"decimal":18,
+"type":"default"
+},{
 "address":"0xfad572db566e5234ac9fc3d570c4edc0050eaa92",
 "symbol":"BTH",
 "decimal":18,
@@ -229,8 +234,18 @@
 "decimal":6,
 "type":"default"
 },{
+"address":"0x111111f7e9B1Fe072ade438F77E1Ce861C7eE4E3",
+"symbol":"CAT (BitClave)",
+"decimal":18,
+"type":"default"
+},{
+"address":"0x68e14bb5A45B9681327E16E528084B9d962C1a39",
+"symbol":"CATs (BitClave)",
+"decimal":18,
+"type":"default"
+},{
 "address":"0x56ba2Ee7890461f463F7be02aAC3099f6d5811A8",
-"symbol":"CAT",
+"symbol":"CAT (Blockcat)",
 "decimal":18,
 "type":"default"
 },{
@@ -399,6 +414,11 @@
 "decimal":2,
 "type":"default"
 },{
+"address":"0xafc39788c51f0c1ff7b55317f3e70299e521fff6",
+"symbol":"eBCH",
+"decimal":8,
+"type":"default"
+},{
 "address":"0xa578aCc0cB7875781b7880903F4594D13cFa8B98",
 "symbol":"ECN",
 "decimal":2,
@@ -491,6 +511,11 @@
 },{
 "address":"0x88FCFBc22C6d3dBaa25aF478C578978339BDe77a",
 "symbol":"FYN",
+"decimal":18,
+"type":"default"
+},{
+ "address":"0x708876f486e448ee89eb332bfbc8e593553058b9",
+"symbol":"GAVEL",
 "decimal":18,
 "type":"default"
 },{
@@ -647,6 +672,11 @@
 "address":"0xfca47962d45adfdfd1ab2d972315db4ce7ccf094",
 "symbol":"IXT",
 "decimal":8,
+"type":"default"
+},{
+"address":"0x0Aaf561eFF5BD9c8F911616933F84166A17cfE0C",
+"symbol":"JBX",
+"decimal":0,
 "type":"default"
 },{
 "address":"0x8727c112C712c4a03371AC87a74dD6aB104Af768",
@@ -859,13 +889,23 @@
 "decimal":18,
 "type":"default"
 },{
+"address":"0xec46f8207d766012454c408de210bcbc2243e71c",
+"symbol":"NOX",
+"decimal":18,
+"type":"default"
+},{
 "address":"0x45e42D659D9f9466cD5DF622506033145a9b89Bc",
 "symbol":"NxC",
 "decimal":3,
 "type":"default"
 },{
-"address":"0x5c6183d10A00CD747a6Dbb5F658aD514383e9419",
+"address":"0x7627de4b93263a6a7570b8dafa64bae812e5c394",
 "symbol":"NXX",
+"decimal":8,
+"type":"default"
+},{
+"address":"0x5c6183d10A00CD747a6Dbb5F658aD514383e9419",
+"symbol":"NXX_OLD",
 "decimal":8,
 "type":"default"
 },{
@@ -894,8 +934,18 @@
 "decimal":18,
 "type":"default"
 },{
+"address":"0x694404595e3075a942397f466aacd462ff1a7bd0",
+"symbol":"PATENTS",
+"decimal":18,
+"type":"default"
+},{
 "address":"0xB97048628DB6B661D4C2aA833e95Dbe1A905B280",
 "symbol":"PAY",
+"decimal":18,
+"type":"default"
+},{
+"address":"0x55648de19836338549130b1af587f16bea46f66b",
+"symbol":"PBL",
 "decimal":18,
 "type":"default"
 },{
@@ -1084,6 +1134,11 @@
 "decimal":18,
 "type":"default"
 },{
+"address":"0x1ec8fe51a9b6a3a6c427d17d9ecc3060fbc4a45c",
+"symbol":"S-A-PAT",
+"decimal":18,
+"type":"default"
+},{
 "address":"0xd7631787B4dCc87b1254cfd1e5cE48e96823dEe8",
 "symbol":"SCL",
 "decimal":8,
@@ -1189,6 +1244,11 @@
 "decimal":4,
 "type":"default"
 },{
+"address":"0x85089389C14Bd9c77FC2b8F0c3d1dC3363Bf06Ef",
+"symbol":"SPF",
+"decimal":18,
+"type":"default"
+},{
 "address":"0x2C4e8f2D746113d0696cE89B35F0d8bF88E0AEcA",
 "symbol":"ST",
 "decimal":18,
@@ -1239,8 +1299,18 @@
 "decimal":18,
 "type":"default"
 },{
+"address":"0x554c98b3ec772f79eE5b96d47A1D10852ED274C8",
+"symbol":"SXD",
+"decimal":18,
+"type":"default"
+},{
 "address":"0x6ceE948C9d593c58Cba5Dfa70482444899D1341c",
 "symbol":"SXS",
+"decimal":18,
+"type":"default"
+},{
+"address":"0xaADB05F449072D275833bAf7C82e8fCa4ee46575",
+"symbol":"SXU",
 "decimal":18,
 "type":"default"
 },{
@@ -1309,6 +1379,11 @@
 "decimal":6,
 "type":"default"
 },{
+"address":"0x24692791bc444c5cd0b81e3cbcaba4b04acd1f3b",
+"symbol":"UKG",
+"decimal":18,
+"type":"default"
+},{
 "address":"0x89205A3A3b2A69De6Dbf7f01ED13B2108B2c43e7",
 "symbol":"Unicorn 🦄",
 "decimal":0,
@@ -1364,8 +1439,13 @@
 "decimal":0,
 "type":"default"
 },{
-"address":"0x03c18d649e743ee0b09f28a81d33575f03af9826",
-"symbol":"WBC",
+"address":"0x0f641b9f7329ba4706580d086d8063c5a3c23dbb",
+"symbol":"WaBi",
+"decimal":18,
+"type":"default"
+},{
+"address":"0x74951B677de32D596EE851A233336926e6A2cd09",
+"symbol":"WBA",
 "decimal":7,
 "type":"default"
 },{
@@ -1396,6 +1476,11 @@
 },{
 "address":"0x4DF812F6064def1e5e029f1ca858777CC98D2D81",
 "symbol":"XAUR",
+"decimal":8,
+"type":"default"
+},{
+"address":"0x533ef0984b2FAA227AcC620C67cce12aA39CD8CD",
+"symbol":"XGM",
 "decimal":8,
 "type":"default"
 },{
