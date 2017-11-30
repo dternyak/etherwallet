@@ -74,7 +74,7 @@ var shapeShiftService = function($http) {
       let filteredArray = marketInfo.filter(function(obj) {
         return obj.pair === pair;
       });
-      if (filteredArray) {
+      if (filteredArray.length > 0) {
         let pairData = filteredArray[0];
         if (originKind === 'ETH') {
           if (pairData.min < SOFT_MIN_CAP_ETH) {
@@ -87,10 +87,15 @@ var shapeShiftService = function($http) {
           }
         }
         return pairData;
-      } else
-        throw Error(
-          `No match found for ${pair}. Please contact support@myetherwallet.com with status code RTE22`
-        );
+      } else {
+        return {
+          min: 0,
+          limit: 0,
+          maxLimit: 0,
+          rate: 0,
+          pair: pair
+        }
+      }
     },
 
     getTimeRemaining: function(address) {
