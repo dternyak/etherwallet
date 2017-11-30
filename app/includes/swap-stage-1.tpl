@@ -72,7 +72,7 @@
 </article>
 <!-- / Swap Rates Panel -->
 
-    <div class="new-feature-banner">
+    <div class="new-feature-banner" ng-show="showStage1">
         <p><b style="padding-right: 8px;">New Feature: </b>Exchange coins & tokens</p>
         <img src="images/logo-shapeshift.svg" class="">
     </div>
