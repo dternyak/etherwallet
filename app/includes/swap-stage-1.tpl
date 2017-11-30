@@ -1,11 +1,6 @@
 <!-- Swap Rates Panel -->
 <article class="swap-rates" ng-if="showStage1">
 
-    <div class="new-feature-banner"}>
-        <p><b style="padding-right: 8px;">New Feature: </b>Exnchange coins & tokens</p>
-        <img src="images/logo-shapeshift.svg" class="">
-    </div>
-
     <!-- Title -->
     <section class="row">
         <h5 class="col-xs-6 col-xs-offset-3" translate="SWAP_rates"> Current Rates </h5>
@@ -77,6 +72,10 @@
 </article>
 <!-- / Swap Rates Panel -->
 
+    <div class="new-feature-banner"}>
+        <p><b style="padding-right: 8px;">New Feature: </b>Exchange coins & tokens</p>
+        <img src="images/logo-shapeshift.svg" class="">
+    </div>
 
 <!-- Swap Init Panel -->
 <article class="swap-panel block clearfix" ng-show="showStage1">
