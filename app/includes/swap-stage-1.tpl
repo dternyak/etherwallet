@@ -86,7 +86,6 @@
     <div ng-if="canShowSwap" class="swap-panel-input-container" style="">
         <div class="spacer"></div>
         <div class="swap-panel-input">
-            <p style="color: red; margin-top: -22px; margin-bottom: 0px;" ng-if="originRateError">{{originRateError}}</p>
             <input id="origin"
                    class="form-control"
                    style="display: inline-block;"
@@ -107,6 +106,7 @@
                     </li>
                 </ul>
             </div>
+            <p style="color: red;margin-bottom: 0px;" ng-if="originRateError">{{originRateError}}</p>
         </div>
 
         <div class="swap-panel-input-container-text">
