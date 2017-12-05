@@ -86,22 +86,35 @@
             </h1>
         </section>
 
-
         <!-- Swap CTA ETH -->
         <article class="row" ng-if="showStage3Eth && shapeShiftStatus.status !== 'complete' && !orderIsExpired">
-            <div class="col-md-6 col-md-offset-3">
-                <button class="btn btn-primary btn-block" ng-click="navigateToSend()"><- Navigate to the Send tab to
-                    send
-                    ETH or Tokens
-                </button>
-            </div>
+            <section class="clearfix collapse-container">
+                <div class="text-center" ng-click="wd = !wd" ng-if="orderResult.inputCurrency === 'ETH'">
+                    <a class="collapse-button"><span ng-show="wd">+</span><span ng-show="!wd">-</span></a>
+                    <h5 traslate="SWAP_unlock">Unlock your wallet to send ETH or Tokens directly from this page.</h5>
+                </div>
 
+                <div class="col-md-6 col-md-offset-3" ng-if="orderResult.inputCurrency !== 'ETH'">
+                    <button class="btn btn-primary btn-block" ng-click="navigateToSend()">&lt;- Navigate to the Send tab to
+                        send
+                        ETH or Tokens
+                    </button>
+                </div>
+
+                <div ng-show="!wd" ng-if="orderResult.inputCurrency === 'ETH'">
+                    @@if (site === 'mew' ) {
+                    <wallet-decrypt-drtv></wallet-decrypt-drtv>
+                    }
+                    @@if (site === 'cx' ) {
+                    <cx-wallet-decrypt-drtv></cx-wallet-decrypt-drtv>
+                    }
+                </div>
+            </section>
 
             <div class="alert alert-danger" ng-show="ajaxReq.type!=='ETH'">
                 <strong>Warning! You are not connected to an ETH node.</strong> <br/>
                 Please use the node switcher in the top-right corner to switch to an ETH node. We <strong>do
-                not</strong>
-                support swapping ETC or Testnet ETH.
+                not</strong> support swapping ETC or Testnet ETH.
             </div>
 
             <section class="row" ng-show="wallet!=null" ng-controller='sendTxCtrl'>
@@ -112,7 +125,6 @@
                 @@if (site === 'cx' ) { @@include( './sendTx-modal.tpl', { "site": "cx" } ) }
             </section>
         </article>
-
         <!-- / Swap CTA ETH -->
 
 
@@ -137,7 +149,8 @@
 
 
     <article class="row text-center" ng-if="failedShift">
-        <h1 style="color: red">Your shift encountered an error! Please contact support using the orange button below</h1>
+        <h1 style="color: red">Your shift encountered an error! Please contact support using the orange button
+            below</h1>
     </article>
 
 

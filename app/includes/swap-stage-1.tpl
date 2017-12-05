@@ -72,10 +72,10 @@
 </article>
 <!-- / Swap Rates Panel -->
 
-    <div class="new-feature-banner" ng-show="showStage1">
-        <p><b style="padding-right: 8px;">New Feature: </b>Exchange coins & tokens</p>
-        <img src="images/logo-shapeshift.svg" class="">
-    </div>
+<div class="new-feature-banner" ng-show="showStage1">
+    <p><b style="padding-right: 8px;">New Feature: </b>Exchange coins & tokens</p>
+    <img src="images/logo-shapeshift.svg" class="">
+</div>
 
 <!-- Swap Init Panel -->
 <article class="swap-panel block clearfix" ng-show="showStage1">
@@ -96,22 +96,23 @@
                    ng-class="Validator.isPositiveNumber(swapOrder.fromVal)  && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
 
             <div class="dropdown" style="display: inline-block;">
-              <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownFrom')">
-                {{swapOrder.fromCoin}}
-                <i class="caret"></i>
-              </a>
+                <a class="btn btn-default dropdown-toggle" ng-click="flipDropdown('dropdownFrom')">
+                    {{swapOrder.fromCoin}}
+                    <i class="caret"></i>
+                </a>
             </div>
             <ul class="dropdown__grid dropdown__grid--left" ng-if="dropdownFrom">
                 <li ng-repeat="coin in originKindCoins | orderBy:'toString()' track by $index">
                     <a ng-class="{true:'active'}[coin == swapOrder.fromCoin]" ng-click="setOrderCoin(true, coin)">
-                      <strong>{{coin}}</strong>
-                      <br />
-                      <small>{{getNameFromSymbol(coin)}}</small>
+                        <img src="{{shapeShiftCoinData[coin]['image']}}" height="20" width="20"/>
+                        <strong>{{coin}}</strong>
+                        <br/>
+                        <small>{{getNameFromSymbol(coin)}}</small>
                     </a>
                 </li>
             </ul>
             <p class="text-danger" ng-if="originRateError">
-              {{originRateError}}
+                {{originRateError}}
             </p>
         </div>
 
@@ -133,18 +134,19 @@
                    ng-class="Validator.isPositiveNumber(swapOrder.toVal) && verifyMinMaxValues() ? 'is-valid' : 'is-invalid'"/>
 
             <div class="dropdown" style="display: inline-block;">
-              <a class="btn btn-default dropdown-toggle" ng-click="flip('dropdownTo')">
-                {{swapOrder.toCoin}}
-                <i class="caret"></i>
-              </a>
+                <a class="btn btn-default dropdown-toggle" ng-click="flipDropdown('dropdownTo')">
+                    {{swapOrder.toCoin}}
+                    <i class="caret"></i>
+                </a>
             </div>
             <ul class="dropdown__grid dropdown__grid--right" ng-show="dropdownTo">
                 <li ng-repeat="coin in allAvailableDestinationCoins | orderBy:'toString()' track by $index"
                     ng-show="coin != swapOrder.fromCoin">
                     <a ng-class="{true:'active'}[coin == swapOrder.toCoin]" ng-click="setOrderCoin(false, coin)">
-                      <strong>{{coin}}</strong>
-                      <br />
-                      <small>{{getNameFromSymbol(coin)}}</small>
+                        <img src="{{shapeShiftCoinData[coin]['image']}}" height="20" width="20"/>
+                        <strong>{{coin}}</strong>
+                        <br/>
+                        <small>{{getNameFromSymbol(coin)}}</small>
                     </a>
                 </li>
             </ul>
@@ -160,14 +162,16 @@
     <!-- Show error message if user is not on ETH network but selects ETH in FROM dropdown -->
     <div class="text-danger"
          ng-show=" swapOrder.fromCoin!='ETC' && ajaxReq.type!='ETH' ">
-      To open this Swap, you must switch to an <code>ETH</code> network. Click the Network dropdown in the in the top-right.
+        To open this Swap, you must switch to an <code>ETH</code> network. Click the Network dropdown in the in the
+        top-right.
     </div>
 
 
     <!-- Show error message if user is not on ETC network but selects ETC in FROM dropdown -->
     <div class="text-danger"
          ng-show=" swapOrder.fromCoin=='ETC' && ajaxReq.type != 'ETC' ">
-      To open this Swap, you must switch to the <code>ETC (Epool.io)</code> network. Click the Network dropdown in the in the top-right.
+        To open this Swap, you must switch to the <code>ETC (Epool.io)</code> network. Click the Network dropdown in the
+        in the top-right.
     </div>
 
     <div class="col-xs-12 clearfix text-center">
